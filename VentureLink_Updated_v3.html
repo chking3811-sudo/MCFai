@@ -16,7 +16,7 @@
   <iframe id="site" title="VentureLink"></iframe>
   <main id="loadError" role="alert"><h1>VentureLink could not load</h1><p>Refresh the page and try again.</p></main>
   <script>
-    // Load the existing site and repair the auth tab selector before its script runs.
+    // Load the existing site and repair its navigation and auth tab handlers before use.
     const source = 'https://raw.githubusercontent.com/chking3811-sudo/MCFai/17eab31b2ab738c2150ef6b64b1de0a728a4a4ef/VentureLink_Updated_v3.html';
     const frame = document.querySelector('#site');
     const showError = () => {
@@ -30,17 +30,33 @@
         return response.text();
       })
       .then(html => {
-        // In the embedded page, $ selects one element, not a collection. The old
-        // call $('.auth-tab').forEach(...) throws and prevents Create from working.
+        // $ selects one element, not a collection; use querySelectorAll for all auth tabs.
         html = html.replace("$('.auth-tab').forEach(", "document.querySelectorAll('.auth-tab').forEach(");
 
         frame.addEventListener('load', () => {
           try {
             const doc = frame.contentDocument;
-            if (!doc || !doc.querySelector('#modal')) throw new Error('Inbox modal is missing.');
+            if (!doc || !doc.querySelector('#modal')) throw new Error('VentureLink page is incomplete.');
+
+            // Explicitly handle the top navigation links inside the embedded page.
+            // This makes section navigation work even when default iframe hash scrolling fails.
+            doc.querySelectorAll('.navlinks a[href^="#"]').forEach(link => {
+              link.addEventListener('click', event => {
+                const id = decodeURIComponent(link.getAttribute('href').slice(1));
+                const target = doc.getElementById(id);
+                if (!target) return;
+                event.preventDefault();
+                target.scrollIntoView({behavior:'smooth', block:'start'});
+                if (doc.defaultView) doc.defaultView.history.replaceState(null, '', `#${encodeURIComponent(id)}`);
+              });
+            });
+            doc.querySelectorAll('#network,#matches,#opportunities,#tools').forEach(section => {
+              section.style.scrollMarginTop = '82px';
+            });
+
             const fix = doc.createElement('style');
             fix.textContent = `
-              /* Make the overlay independently scrollable on short screens. */
+              /* Keep long dialogs scrollable on short screens. */
               #modal.modal {
                 position: fixed !important;
                 inset: 0 !important;
@@ -63,7 +79,6 @@
                 overscroll-behavior: contain;
                 -webkit-overflow-scrolling: touch;
               }
-              #modal .dialog-close { position: sticky; top: 0; z-index: 3; }
               @media (max-width: 600px) {
                 #modal.modal { padding: 8px 8px max(12px, env(safe-area-inset-bottom)) !important; }
                 #modal .dialog { max-height: calc(100vh - 16px) !important; max-height: calc(100dvh - 16px) !important; padding: 18px !important; }
