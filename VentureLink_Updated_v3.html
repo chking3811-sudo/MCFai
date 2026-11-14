@@ -3,109 +3,364 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#102b4e">
   <title>VentureLink | Build the right connections</title>
   <style>
-    *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#f6f8fb}iframe{display:block;width:100%;min-height:100vh;border:0}
-    #loadError{display:none;max-width:680px;margin:12vh auto;padding:24px;color:#172b45;font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;background:#fff;border:1px solid #e1e8f1;border-radius:14px}
-  </style>
+    :root{--navy:#102b4e;--blue:#2869bd;--sky:#eaf2fc;--ink:#172b45;--muted:#687991;--line:#e1e8f1;--bg:#f6f8fb;--green:#16835d;--amber:#805a17}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer}a{text-decoration:none;color:inherit}.wrap{width:min(1120px,calc(100% - 32px));margin:auto}.topbar{background:var(--navy);color:#fff;position:sticky;top:0;z-index:20}.nav{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0}.logo{font-size:1.25rem;font-weight:800;color:#fff}.logo span{color:#8fc2ff}.navlinks{display:flex;align-items:center;gap:18px}.navlinks a{color:#dfeaff;font-size:.95rem}.btn{display:inline-flex;align-items:center;justify-content:center;border:0;border-radius:10px;padding:9px 14px;font-weight:700;cursor:pointer}.btn.primary{background:var(--blue);color:#fff}.btn.light{background:#fff;color:var(--navy)}.section{padding:34px 0}.hero{background:linear-gradient(180deg,#132f57 0%,#1e3f73 100%);color:#fff;padding:64px 0 48px}.hero .small{letter-spacing:.08em;text-transform:uppercase;font-weight:700;opacity:.85}.hero h1{font-size:clamp(2.1rem,4vw,3.5rem);margin:18px 0 12px;line-height:1.1}.hero p{max-width:680px;color:#dceafc;margin:0 0 22px}.controls{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:18px 0 22px}.field{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:9px;background:#fff;color:var(--ink)}.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:0 6px 16px rgba(16,43,78,.06)}.tag{display:inline-block;background:#eaf2fc;color:#102b4e;padding:5px 9px;border-radius:999px;font-size:.72rem;font-weight:700}.status{display:inline-block;margin-left:8px;color:var(--amber);font-size:.72rem;font-weight:700}.muted{color:var(--muted)}.small{font-size:.8rem}.profile-name{border:0;background:none;padding:0;margin:10px 0 4px;font-size:1.15rem;font-weight:800;text-align:left;color:var(--ink);cursor:pointer}.match{font-size:.76rem;text-transform:uppercase;letter-spacing:.08em;color:var(--blue);font-weight:800}.empty{padding:20px;border:1px dashed var(--line);border-radius:10px;background:#fff;color:var(--muted);text-align:center}.panel{background:#f7f9fc;border:1px solid var(--line);border-radius:14px;padding:18px}.opportunity-head{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;margin-bottom:10px}.opportunity-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.opportunity-item h3{margin:12px 0 8px}.opportunity-item .meta{font-size:.8rem;color:var(--muted)}.modal{position:fixed;inset:0;background:rgba(16,43,78,.45);display:none;align-items:center;justify-content:center;padding:20px;z-index:30}.modal.show{display:flex}.dialog{background:#fff;border-radius:16px;max-width:620px;width:min(100%,620px);padding:24px;box-shadow:0 24px 60px rgba(16,43,78,.22);max-height:85vh;overflow:auto}.dialog-close{float:right;border:0;background:none;font-size:1.7rem;cursor:pointer;color:var(--muted)}.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.label{display:block;font-size:.8rem;font-weight:700;color:var(--muted);margin:12px 0 6px}.input,textarea,select{width:100%;padding:10px 12px;border:1px solid #cbd6e4;border-radius:9px;background:#fff;color:var(--ink)}textarea{min-height:110px;resize:vertical}.watchlist,.hours-editor{display:grid;gap:10px}.watchlist li,.hours-editor .day-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff}.day-row input[type="time"]{width:110px}.day-row label{display:flex;align-items:center;gap:8px}.tinybtn{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 8px;font-size:.72rem;color:var(--ink)}footer{padding:28px 0 40px;color:var(--muted);font-size:.9rem;border-top:1px solid var(--line);margin-top:10px}.hidden{display:none!important}@media(max-width:760px){.controls,.cards,.opportunity-list,.form-row{grid-template-columns:1fr}.nav{flex-wrap:wrap;padding:12px 0}.navlinks{order:3;width:100%;justify-content:center;gap:12px}.hero{padding-top:52px}}</style>
 </head>
 <body>
-  <iframe id="website" title="VentureLink website"></iframe>
-  <main id="loadError" role="alert"><h1>VentureLink could not load</h1><p>Please refresh this page or check your internet connection.</p></main>
+  <div class="topbar"><div class="wrap nav"><a class="logo" href="#">Venture<span>Link.</span></a><nav class="navlinks"><a href="#network">Network</a><a href="#recommendations">Matches</a><a href="#opportunities">Opportunities</a><a href="#trust">Trust & reviews</a><a href="#tools">Business tools</a></nav><button class="btn light" type="button" id="inboxBtn">Inbox <span id="msgCount"></span></button></div></div>
+  <header class="hero"><div class="wrap"><div class="small">A network built for business growth</div><h1>Meet the people who move your business forward.</h1><p>Find suppliers, discover potential investors, and learn from experienced mentors—all in one place.</p><a class="btn light" href="#network">Explore the network ↓</a></div></header>
+  <main class="wrap">
+    <section class="section" id="network">
+      <h2>Explore the network</h2>
+      <p class="muted small">Demo profiles are illustrative. Click a name to compose a message.</p>
+      <div class="controls">
+        <input class="field" id="searchInput" placeholder="Search people, industries, or skills">
+        <select class="field" id="typeFilter"><option value="">All connection types</option></select>
+        <select class="field" id="industryFilter"><option value="">All industries</option></select>
+        <button class="btn primary" type="button" id="searchBtn">Search</button>
+      </div>
+      <div class="cards" id="profilesList"></div>
+    </section>
+
+    <section class="section" id="recommendations">
+      <h2>Recommended connections</h2>
+      <p class="muted small">Choose a goal and optional filters, then select “Find matches.”</p>
+      <div class="panel">
+        <div class="controls">
+          <select class="field" id="goalSelect"><option value="Supplier">Find a supplier</option><option value="Investor">Find an investor</option><option value="Mentor">Find a mentor</option><option value="All">Explore all connections</option></select>
+          <select class="field" id="recIndustry"><option value="">Any industry</option></select>
+          <select class="field" id="recLocation"><option value="">Any location</option></select>
+          <button class="btn primary" type="button" id="recommendBtn">Find matches</button>
+        </div>
+        <div class="cards" id="recommendationsList"><div class="empty">Choose your goal and select “Find matches” to see recommendations.</div></div>
+      </div>
+    </section>
+
+    <section class="section" id="opportunities">
+      <div class="opportunity-head">
+        <div>
+          <h2>Business opportunity board</h2>
+          <div class="muted small">Post what your business needs or browse demo opportunities.</div>
+        </div>
+        <button class="btn primary" type="button" id="postOpportunityBtn">Post an opportunity</button>
+      </div>
+      <div class="opportunity-list" id="opportunityList"></div>
+    </section>
+
+    <section class="section" id="trust">
+      <h2>Trust, verification & reviews</h2>
+      <p class="muted small">Badges should reflect checks that VentureLink actually performs—not unverified self-claims.</p>
+      <div class="cards">
+        <article class="card"><span class="tag">Identity check</span><h3>Verified business identity</h3><p class="muted">A profile may show a verified badge only after a check of legal entity details or a trusted referral.</p></article>
+        <article class="card"><span class="tag">Risk review</span><h3>Review and dispute process</h3><p class="muted">Consumers and businesses should be able to flag suspicious behavior and request a human review.</p></article>
+        <article class="card"><span class="tag">Reference checks</span><h3>Customer and partner feedback</h3><p class="muted">A review should be tied to a real transaction or direct working relationship, not just an online profile fill-in.</p></article>
+      </div>
+    </section>
+
+    <section class="section" id="tools">
+      <h2>Business tools</h2>
+      <p class="muted small">These browser-only controls are prototypes, not secure sharing, investment monitoring, or appointment services.</p>
+      <div class="cards">
+        <article class="card"><span class="tag">Private data room · prototype</span><h3>Prepare a document list</h3><p class="muted small">Choose files to see their names in this tab. The files are not uploaded or shared in this demo.</p><input class="field" type="file" id="roomFiles" multiple><ul class="watchlist" id="roomFileList"><li>No files selected.</li></ul></article>
+        <article class="card"><span class="tag">Investment watchlist</span><h3>Track demo profiles</h3><p class="muted small">Add sample organizations to a watchlist saved in this browser. No live investment data is shared.</p><div class="form-row"><select class="field" id="watchSelect"></select><button class="btn primary" type="button" id="addWatchBtn">Add</button></div><ul class="watchlist" id="watchList"></ul></article>
+        <article class="card"><span class="tag">Business hours & availability</span><h3>Set your weekly hours</h3><p class="muted small">Edit a local schedule. This does not publish availability or connect to a calendar service.</p><div class="hours-editor" id="hoursEditor"></div><button class="btn primary" type="button" id="saveHoursBtn">Save schedule</button></article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="wrap"><strong>VentureLink.</strong> Connecting people. Building businesses. Creating opportunities.<br><span class="small">Demo data and posts are saved only in this browser. Do not enter sensitive personal or financial information.</span></footer>
+
+  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="dialog">
+      <button type="button" class="dialog-close" id="closeModal" aria-label="Close">×</button>
+      <div id="modalContent"></div>
+    </div>
+  </div>
+
   <script>
-    const source = 'https://raw.githubusercontent.com/chking3811-sudo/MCFai/458e8ee1afe7129313867584096341304b73ee7f/VentureLink_Updated_v3.html';
-    const sheetUrl = 'https://sheetdb.io/api/v1/tp4g3dvbqo7ro?sheet=Sheet1';
-    const frame = document.querySelector('#website');
-    const showLoadError = () => {
-      frame.hidden = true;
-      document.querySelector('#loadError').style.display = 'block';
-    };
+    let sampleProfiles = [];
+
+    const $ = selector => document.querySelector(selector);
+    const escapeHTML = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
     const normalize = value => String(value ?? '').trim().toLowerCase().replace(/[^a-z0-9]/g, '');
     const getField = (row, candidates) => {
       const entries = Object.entries(row || {});
       for (const candidate of candidates) {
         const match = entries.find(([key]) => normalize(key) === normalize(candidate));
-        if (match && String(match[1] ?? '').trim()) return String(match[1]).trim();
+        if (match) {
+          const value = String(match[1] ?? '').trim();
+          if (value) return value;
+        }
       }
       return '';
     };
-    const escapeHTML = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 
-    fetch(source).then(response => {
-      if (!response.ok) throw new Error('Website source unavailable');
-      return response.text();
-    }).then(html => {
-      // A top-level var is accessible on the iframe window so the fetched data can replace it.
-      html = html.replace('const sampleProfiles=[', 'var sampleProfiles=[];\n    /* profiles loaded from SheetDB */\n    var unusedSampleProfiles=[');
-      // Remove the original array initializer entirely, including the temporary empty array above.
-      html = html.replace(/var sampleProfiles=\[\];\n    \/\* profiles loaded from SheetDB \*\/\n    var unusedSampleProfiles=\[[\s\S]*?\n    \];/, 'var sampleProfiles = [];');
+    function readStored(key, fallback) {
+      try {
+        return JSON.parse(localStorage.getItem(key)) ?? fallback;
+      } catch {
+        return fallback;
+      }
+    }
 
-      frame.addEventListener('load', () => {
-        try {
-          const doc = frame.contentDocument;
-          const win = frame.contentWindow;
-          const inboxButton = doc.querySelector('#inboxBtn');
-          const nav = doc.querySelector('.navlinks');
-          if (!inboxButton || !nav) throw new Error('Website navigation unavailable');
+    function store(key, value) {
+      try {
+        localStorage.setItem(key, JSON.stringify(value));
+        return true;
+      } catch {
+        return false;
+      }
+    }
 
-          const messaging = doc.createElement('a');
-          messaging.href = '#messaging';
-          messaging.textContent = 'Messaging';
-          messaging.setAttribute('aria-label', 'Open Messaging inbox');
-          messaging.addEventListener('click', event => {
-            event.preventDefault();
-            inboxButton.click();
-          });
-          nav.append(messaging);
+    async function loadNetworkProfiles() {
+      try {
+        const response = await fetch('https://sheetdb.io/api/v1/tp4g3dvbqo7ro?sheet=Sheet1');
+        if (!response.ok) throw new Error('SheetDB fetch failed.');
+        const rows = await response.json();
+        if (!Array.isArray(rows)) throw new Error('SheetDB returned an unexpected response.');
 
-          fetch(sheetUrl).then(response => {
-            if (!response.ok) throw new Error('Unable to load profiles from SheetDB.');
-            return response.json();
-          }).then(rows => {
-            if (!Array.isArray(rows)) throw new Error('SheetDB returned an unexpected response.');
-            const profiles = rows.map((row, index) => ({
-              id: getField(row, ['id', 'profile id', 'business id']) || 'sheet-' + index,
-              name: getField(row, ['name', 'company name', 'business name', 'organization', 'full name', 'profile name']),
-              type: getField(row, ['type', 'connection type', 'profile type', 'role', 'category']) || 'Connection',
-              industry: getField(row, ['industry', 'sector', 'business industry']) || 'Other',
-              location: getField(row, ['location', 'city', 'address', 'region']) || 'Not specified',
-              description: getField(row, ['description', 'about', 'bio', 'summary', 'details']) || 'Connect to learn more about this profile.'
-            })).filter(profile => profile.name);
-            if (!profiles.length) throw new Error('No profiles with a name were found in Sheet1.');
+        sampleProfiles = rows
+          .map((row, index) => ({
+            id: getField(row, ['id', 'profile id', 'business id']) || `sheet-${index}`,
+            name: getField(row, ['name', 'company name', 'business name', 'organization', 'full name', 'profile name']),
+            type: getField(row, ['type', 'connection type', 'profile type', 'role', 'category']) || 'Connection',
+            industry: getField(row, ['industry', 'sector', 'business industry']) || 'Other',
+            location: getField(row, ['location', 'city', 'address', 'region']) || 'Not specified',
+            description: getField(row, ['description', 'about', 'bio', 'summary', 'details']) || 'Connect to learn more about this profile.'
+          }))
+          .filter(profile => profile.name);
 
-            win.sampleProfiles = profiles;
-            const addOptions = (selector, values) => {
-              const select = doc.querySelector(selector);
-              if (!select) return;
-              const known = new Set(Array.from(select.options, option => option.value.toLowerCase()));
-              values.forEach(value => {
-                if (!known.has(value.toLowerCase())) select.add(new win.Option(value, value));
-              });
-            };
-            addOptions('#typeFilter', [...new Set(profiles.map(profile => profile.type))]);
-            addOptions('#industryFilter', [...new Set(profiles.map(profile => profile.industry))]);
-            addOptions('#recIndustry', [...new Set(profiles.map(profile => profile.industry))]);
-            addOptions('#recLocation', [...new Set(profiles.map(profile => profile.location))]);
-            win.renderProfiles();
-            win.renderRecommendations();
-            if (typeof win.setupWatchlist === 'function') win.setupWatchlist();
-          }).catch(error => {
-            const list = doc.querySelector('#profilesList');
-            if (list) list.innerHTML = '<div class="empty">' + escapeHTML(error.message || 'Could not load network profiles.') + '</div>';
-          });
-
-          const resize = () => {
-            frame.style.height = `${Math.max(doc.documentElement.scrollHeight, doc.body.scrollHeight)}px`;
-          };
-          resize();
-          new ResizeObserver(resize).observe(doc.documentElement);
-        } catch (error) {
-          showLoadError();
+        if (!sampleProfiles.length) {
+          throw new Error('No valid profile names were returned from Sheet1.');
         }
-      }, {once:true});
-      frame.srcdoc = html;
-    }).catch(showLoadError);
+
+        const typeSelect = $('#typeFilter');
+        const industrySelect = $('#industryFilter');
+        const recIndustrySelect = $('#recIndustry');
+        const recLocationSelect = $('#recLocation');
+
+        const addOptions = (select, values) => {
+          if (!select) return;
+          const seen = new Set(Array.from(select.options).map(option => option.value.toLowerCase()));
+          values.forEach(value => {
+            if (!seen.has(String(value).toLowerCase())) {
+              select.add(new Option(value, value));
+              seen.add(String(value).toLowerCase());
+            }
+          });
+        };
+
+        addOptions(typeSelect, [...new Set(sampleProfiles.map(profile => profile.type))]);
+        addOptions(industrySelect, [...new Set(sampleProfiles.map(profile => profile.industry))]);
+        addOptions(recIndustrySelect, [...new Set(sampleProfiles.map(profile => profile.industry))]);
+        addOptions(recLocationSelect, [...new Set(sampleProfiles.map(profile => profile.location))]);
+
+        renderProfiles();
+        renderRecommendations();
+        setupWatchlist();
+      } catch (error) {
+        const list = $('#profilesList');
+        if (list) {
+          list.innerHTML = '<div class="empty">Could not load network profiles: ' + escapeHTML(error.message || 'Unknown error') + '</div>';
+        }
+      }
+    }
+
+    let opportunities = readStored('vl_opportunities', [
+      {id:'o1',title:'Seeking a small-batch product manufacturer',type:'Supplier',industry:'Manufacturing',location:'Fort Wayne, IN',description:'A demo founder is preparing a first product run and needs a reliable manufacturing partner.',postedBy:'Demo founder'},
+      {id:'o2',title:'Looking for an early-stage business mentor',type:'Mentor',industry:'Retail',location:'Remote',description:'A demo retail founder wants advice on customer research, pricing, and a launch plan.',postedBy:'Demo founder'},
+      {id:'o3',title:'Exploring seed funding for a software idea',type:'Investor',industry:'Technology',location:'Remote',description:'A demo founder is preparing a pitch and hopes to meet early-stage investors.',postedBy:'Demo founder'}
+    ]);
+    let messages = readStored('vl_messages', []), watchlist = readStored('vl_watchlist', []);
+    const weekdays = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+    const defaultHours = weekdays.map((day, index) => ({ day, open: index < 5, start: '09:00', end: '17:00' }));
+    let businessHours = readStored('vl_business_hours', defaultHours);
+
+    function openModal(content) {
+      $('#modalContent').innerHTML = content;
+      $('#modal').classList.add('show');
+      $('#modal').querySelector('.dialog-close').focus();
+    }
+
+    function closeModal() {
+      $('#modal').classList.remove('show');
+    }
+
+    function renderProfiles() {
+      const query = $('#searchInput').value.trim().toLowerCase();
+      const type = $('#typeFilter').value;
+      const industry = $('#industryFilter').value;
+      const matches = sampleProfiles.filter(profile => (!type || profile.type === type) && (!industry || profile.industry === industry) && (!query || [profile.name, profile.type, profile.industry, profile.location, profile.description].join(' ').toLowerCase().includes(query)));
+      $('#profilesList').innerHTML = matches.length ? matches.map(profile => `<article class="card"><span class="tag">${escapeHTML(profile.type)}</span> <span class="status">Not verified</span><h3><button class="profile-name" type="button" data-profile-id="${escapeHTML(profile.id)}">${escapeHTML(profile.name)}</button></h3><div class="muted small">${escapeHTML(profile.industry)} · ${escapeHTML(profile.location)}</div><p class="muted">${escapeHTML(profile.description)}</p><p class="small muted">No verified credential or review data is available in this demo.</p></article>`).join('') : '<div class="empty">No matching profiles. Try changing your search or filters.</div>';
+    }
+
+    function renderRecommendations() {
+      const goal = $('#goalSelect').value;
+      const industry = $('#recIndustry').value;
+      const location = $('#recLocation').value;
+      const matches = sampleProfiles.map(profile => {
+        let score = 0;
+        if (goal === 'All' || profile.type === goal) score += 5;
+        if (industry && profile.industry === industry) score += 3;
+        if (location && profile.location === location) score += 2;
+        return { profile, score };
+      }).filter(item => item.score > 0).sort((a, b) => b.score - a.score || a.profile.name.localeCompare(b.profile.name)).slice(0, 3);
+      $('#recommendationsList').innerHTML = matches.length ? matches.map(({ profile, score }) => `<article class="card"><div class="match">Suggested match · ${score} points</div><h3><button class="profile-name" type="button" data-profile-id="${escapeHTML(profile.id)}">${escapeHTML(profile.name)}</button></h3><span class="status">Not verified</span><div class="muted small">${escapeHTML(profile.type)} · ${escapeHTML(profile.industry)} · ${escapeHTML(profile.location)}</div><p class="muted">${escapeHTML(profile.description)}</p></article>`).join('') : '<div class="empty">No close matches yet. Try a broader industry or location.</div>';
+    }
+
+    function renderOpportunities() {
+      $('#opportunityList').innerHTML = opportunities.length ? opportunities.map(opportunity => `<article class="card opportunity-item"><span class="tag">${escapeHTML(opportunity.type)} needed</span><h3>${escapeHTML(opportunity.title)}</h3><div class="meta">${escapeHTML(opportunity.industry)} · ${escapeHTML(opportunity.location)}</div><p class="muted">${escapeHTML(opportunity.description)}</p><p class="small muted">Posted by ${escapeHTML(opportunity.postedBy)}</p><button class="btn primary" type="button" data-id="${escapeHTML(opportunity.id)}" class="interestBtn">I’m interested</button></article>`).join('') : '<div class="empty">No opportunities posted yet. Be the first to add one.</div>';
+    }
+
+    function postOpportunity() {
+      openModal(`<h2 id="modalTitle">Post a business opportunity</h2><p class="muted small">Describe the connection or support you need.</p><form id="opportunityForm"><div class="form-row"><div><label class="label" for="oppTitle">Opportunity title</label><input id="oppTitle" class="input" name="title" required maxlength="120"></div><div><label class="label" for="oppType">Need</label><select id="oppType" class="input" name="type"><option>Supplier</option><option>Investor</option><option>Mentor</option></select></div></div><div class="form-row"><div><label class="label" for="oppIndustry">Industry</label><input id="oppIndustry" class="input" name="industry" required maxlength="80"></div><div><label class="label" for="oppLocation">Location</label><input id="oppLocation" class="input" name="location" required maxlength="80"></div></div><label class="label" for="oppDescription">Description</label><textarea id="oppDescription" name="description" required maxlength="500"></textarea><div style="margin-top:16px;text-align:right"><button class="btn primary" type="submit">Publish</button></div></form>`);
+      $('#opportunityForm').addEventListener('submit', event => {
+        event.preventDefault();
+        const form = new FormData(event.currentTarget);
+        opportunities.unshift({
+          id: `o${Date.now()}`,
+          title: String(form.get('title')).trim(),
+          type: String(form.get('type')).trim(),
+          industry: String(form.get('industry')).trim(),
+          location: String(form.get('location')).trim(),
+          description: String(form.get('description')).trim(),
+          postedBy: 'You'
+        });
+        store('vl_opportunities', opportunities);
+        renderOpportunities();
+        closeModal();
+      }, { once: true });
+    }
+
+    function respondToOpportunity(id) {
+      const opportunity = opportunities.find(item => item.id === id);
+      if (!opportunity) return;
+      openModal(`<h2 id="modalTitle">Interested in this opportunity?</h2><p class="muted">${escapeHTML(opportunity.title)}</p><p class="muted small">${escapeHTML(opportunity.type)} · ${escapeHTML(opportunity.industry)} · ${escapeHTML(opportunity.location)}</p><p class="muted">${escapeHTML(opportunity.description)}</p><div style="text-align:right"><button class="btn primary" type="button" id="doneBtn">Done</button></div>`);
+      $('#doneBtn').addEventListener('click', closeModal, { once: true });
+    }
+
+    function messageProfile(id) {
+      const profile = sampleProfiles.find(item => item.id === id);
+      if (!profile) return;
+      openModal(`<h2 id="modalTitle">Message ${escapeHTML(profile.name)}</h2><p class="muted small">${escapeHTML(profile.type)} · ${escapeHTML(profile.industry)} · ${escapeHTML(profile.location)}</p><form id="messageForm"><label class="label" for="msgSubject">Subject</label><input id="msgSubject" class="input" name="subject" required maxlength="120"><label class="label" for="msgBody">Message</label><textarea id="msgBody" name="body" required maxlength="1500"></textarea><div style="margin-top:16px;text-align:right"><button class="btn primary" type="submit">Save message</button></div></form>`);
+      $('#messageForm').addEventListener('submit', event => {
+        event.preventDefault();
+        const subject = $('#msgSubject').value.trim();
+        const body = $('#msgBody').value.trim();
+        messages.unshift({
+          id: `m${Date.now()}`,
+          sender: 'You',
+          profile: profile.name,
+          subject,
+          body,
+          createdAt: new Date().toISOString()
+        });
+        store('vl_messages', messages);
+        renderInboxCount();
+        closeModal();
+        openModal(`<h2 id="modalTitle">Message saved</h2><p class="muted">Your message to ${escapeHTML(profile.name)} has been saved in this browser.</p><div style="text-align:right"><button class="btn primary" type="button" id="doneBtn">Done</button></div>`);
+        $('#doneBtn').addEventListener('click', closeModal, { once: true });
+      }, { once: true });
+    }
+
+    function showSavedMessage(text) {
+      openModal(`<h2 id="modalTitle">Message saved</h2><p class="muted">${escapeHTML(text)}</p><button type="button" class="btn primary" id="doneBtn">Done</button>`);
+      $('#doneBtn').addEventListener('click', closeModal, { once: true });
+    }
+
+    function renderInboxCount() {
+      $('#msgCount').textContent = messages.length ? `(${messages.length})` : '';
+    }
+
+    function showInbox() {
+      openModal(`<h2 id="modalTitle">Your inbox</h2><p class="muted small">Local demo messages appear here. They are not delivered to recipients.</p>${messages.length ? messages.map(message => `<article class="card" style="margin:10px 0"><h3>${escapeHTML(message.subject || 'No subject')}</h3><div class="muted small">To ${escapeHTML(message.profile)}</div><p class="muted">${escapeHTML(message.body)}</p></article>`).join('') : '<div class="empty">No messages saved yet.</div>'}<div style="text-align:right;margin-top:12px"><button type="button" class="btn primary" id="doneBtn">Close</button></div>`);
+      $('#doneBtn').addEventListener('click', closeModal, { once: true });
+    }
+
+    function renderWatchlist() {
+      const list = $('#watchList');
+      list.innerHTML = watchlist.length ? watchlist.map(id => {
+        const profile = sampleProfiles.find(item => item.id === id);
+        return profile ? `<li>${escapeHTML(profile.name)} <button type="button" class="tinybtn removeWatch" data-id="${escapeHTML(profile.id)}">Remove</button></li>` : '';
+      }).join('') : '<li>No profiles saved.</li>';
+    }
+
+    function setupWatchlist() {
+      const select = $('#watchSelect');
+      select.innerHTML = sampleProfiles.map(profile => `<option value="${escapeHTML(profile.id)}">${escapeHTML(profile.name)}</option>`).join('');
+      renderWatchlist();
+    }
+
+    function renderHours() {
+      const savedByDay = new Map(businessHours.map(item => [item.day, item]));
+      $('#hoursEditor').innerHTML = weekdays.map(day => {
+        const item = savedByDay.get(day) || { open: false, start: '09:00', end: '17:00' };
+        return `<div class="day-row"><label><input type="checkbox" id="open-${day}" ${item.open ? 'checked' : ''}> ${day}</label><input type="time" data-start="${day}" value="${item.start}"><input type="time" data-end="${day}" value="${item.end}"></div>`;
+      }).join('');
+    }
+
+    $('#searchBtn').addEventListener('click', renderProfiles);
+    $('#searchInput').addEventListener('input', renderProfiles);
+    $('#typeFilter').addEventListener('change', renderProfiles);
+    $('#industryFilter').addEventListener('change', renderProfiles);
+    $('#recommendBtn').addEventListener('click', renderRecommendations);
+    $('#goalSelect').addEventListener('change', renderRecommendations);
+    $('#recIndustry').addEventListener('change', renderRecommendations);
+    $('#recLocation').addEventListener('change', renderRecommendations);
+    $('#postOpportunityBtn').addEventListener('click', postOpportunity);
+    $('#closeModal').addEventListener('click', closeModal);
+    $('#modal').addEventListener('click', event => { if (event.target.id === 'modal') closeModal(); });
+    document.addEventListener('keydown', event => { if (event.key === 'Escape') closeModal(); });
+    $('#roomFiles').addEventListener('change', event => {
+      const files = Array.from(event.target.files || []);
+      $('#roomFileList').innerHTML = files.length ? files.map(file => `<li>${escapeHTML(file.name)}</li>`).join('') : '<li>No files selected.</li>';
+    });
+    $('#clearRoomBtn')?.addEventListener('click', () => {
+      $('#roomFiles').value = '';
+      $('#roomFileList').innerHTML = '<li>No files selected.</li>';
+    });
+    $('#addWatchBtn').addEventListener('click', () => {
+      const id = $('#watchSelect').value;
+      if (!watchlist.includes(id)) {
+        watchlist.push(id);
+        store('vl_watchlist', watchlist);
+        renderWatchlist();
+      }
+    });
+    $('#watchList').addEventListener('click', event => {
+      const button = event.target.closest('.removeWatch');
+      if (!button) return;
+      watchlist = watchlist.filter(id => id !== button.dataset.id);
+      store('vl_watchlist', watchlist);
+      renderWatchlist();
+    });
+    $('#saveHoursBtn').addEventListener('click', () => {
+      businessHours = weekdays.map(day => ({
+        day,
+        open: $(`#open-${day}`).checked,
+        start: $(`[data-start="${day}"]`).value,
+        end: $(`[data-end="${day}"]`).value
+      }));
+      store('vl_business_hours', businessHours);
+    });
+    $('#opportunityList').addEventListener('click', event => {
+      const button = event.target.closest('.interestBtn');
+      if (button) respondToOpportunity(button.dataset.id);
+    });
+    ['profilesList', 'recommendationsList'].forEach(id => {
+      $('#' + id).addEventListener('click', event => {
+        const button = event.target.closest('.profile-name');
+        if (button) messageProfile(button.dataset.profileId);
+      });
+    });
+    $('#inboxBtn').addEventListener('click', showInbox);
+
+    renderOpportunities();
+    renderInboxCount();
+    renderHours();
+    loadNetworkProfiles();
   </script>
 </body>
 </html>
