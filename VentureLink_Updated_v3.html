@@ -5,74 +5,242 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>VentureLink | Build the right connections</title>
   <style>
-    :root{--navy:#102b4e;--blue:#2869bd;--sky:#eaf2fc;--ink:#172b45;--muted:#687991;--line:#e1e8f1;--bg:#f6f8fb;--green:#16835d;--amber:#805a17}
-    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer}a{text-decoration:none;color:inherit}.wrap{width:min(1120px,calc(100% - 32px));margin:auto}.topbar{background:var(--navy);color:#fff;position:sticky;top:0;z-index:20}.nav{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0}.logo{font-size:1.25rem;font-weight:800;color:#fff}.logo span{color:#8fc2ff}.navlinks{display:flex;align-items:center;gap:18px}.navlinks a{color:#dfeaff;font-size:.95rem}.btn{display:inline-flex;align-items:center;justify-content:center;border:0;border-radius:10px;padding:9px 14px;font-weight:700;cursor:pointer}.btn.primary{background:var(--blue);color:#fff}.btn.light{background:#fff;color:var(--navy)}.section{padding:34px 0}.hero{background:linear-gradient(180deg,#132f57 0%,#1e3f73 100%);color:#fff;padding:64px 0 48px}.hero .small{letter-spacing:.08em;text-transform:uppercase;font-weight:700;opacity:.85}.hero h1{font-size:clamp(2.1rem,4vw,3.5rem);margin:18px 0 12px;line-height:1.1}.hero p{max-width:680px;color:#dceafc;margin:0 0 22px}.controls{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:18px 0 22px}.field{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:9px;background:#fff;color:var(--ink)}.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:0 6px 16px rgba(16,43,78,.06)}.tag{display:inline-block;background:#eaf2fc;color:#102b4e;padding:5px 9px;border-radius:999px;font-size:.72rem;font-weight:700}.status{display:inline-block;margin-left:8px;color:var(--amber);font-size:.72rem;font-weight:700}.muted{color:var(--muted)}.small{font-size:.8rem}.profile-name{border:0;background:none;padding:0;margin:10px 0 4px;font-size:1.15rem;font-weight:800;text-align:left;color:var(--ink);cursor:pointer}.match{font-size:.76rem;text-transform:uppercase;letter-spacing:.08em;color:var(--blue);font-weight:800}.empty{padding:20px;border:1px dashed var(--line);border-radius:10px;background:#fff;color:var(--muted);text-align:center}.panel{background:#f7f9fc;border:1px solid var(--line);border-radius:14px;padding:18px}.opportunity-head{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;margin-bottom:10px}.opportunity-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.opportunity-item h3{margin:12px 0 8px}.opportunity-item .meta{font-size:.8rem;color:var(--muted)}.modal{position:fixed;inset:0;background:rgba(16,43,78,.45);display:none;align-items:center;justify-content:center;padding:20px;z-index:30}.modal.show{display:flex}.dialog{background:#fff;border-radius:16px;max-width:620px;width:min(100%,620px);padding:24px;box-shadow:0 24px 60px rgba(16,43,78,.22);max-height:85vh;overflow:auto}.dialog-close{float:right;border:0;background:none;font-size:1.7rem;cursor:pointer;color:var(--muted)}.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.label{display:block;font-size:.8rem;font-weight:700;color:var(--muted);margin:12px 0 6px}.input,textarea,select{width:100%;padding:10px 12px;border:1px solid #cbd6e4;border-radius:9px;background:#fff;color:var(--ink)}textarea{min-height:110px;resize:vertical}.watchlist,.hours-editor{display:grid;gap:10px}.watchlist li,.hours-editor .day-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff}.day-row input[type="time"]{width:110px}.day-row label{display:flex;align-items:center;gap:8px}.tinybtn{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 8px;font-size:.72rem;color:var(--ink)}footer{padding:28px 0 40px;color:var(--muted);font-size:.9rem;border-top:1px solid var(--line);margin-top:10px}.hidden{display:none!important}@media(max-width:760px){.controls,.cards,.opportunity-list,.form-row{grid-template-columns:1fr}.nav{flex-wrap:wrap;padding:12px 0}.navlinks{order:3;width:100%;justify-content:center;gap:12px}.hero{padding-top:52px}}</style>
+    :root {
+      --navy:#102b4e; --blue:#2869bd; --sky:#eaf2fc; --ink:#172b45; --muted:#687991; --line:#e1e8f1;
+      --bg:#f6f8fb; --green:#16835d; --amber:#805a17; --danger:#a33333; --white:#fff;
+    }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body {
+      margin:0; background:var(--bg); color:var(--ink); font:15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+    a, button, input, select, textarea { font:inherit; }
+    button { cursor:pointer; }
+    .wrap { width:min(1100px, calc(100% - 32px)); margin:0 auto; }
+    .topbar {
+      background:var(--navy); color:var(--white); padding:14px 0; position:sticky; top:0; z-index:30;
+      box-shadow:0 3px 14px rgba(16,43,78,0.12);
+    }
+    .nav { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+    .logo { color:var(--white); text-decoration:none; font-weight:800; font-size:1.35rem; }
+    .logo span { color:#9cc8ff; }
+    .navlinks { display:flex; align-items:center; gap:18px; flex-wrap:wrap; }
+    .navlinks a, .nav-actions button {
+      color:var(--white); text-decoration:none; background:transparent; border:1px solid rgba(255,255,255,.18);
+      border-radius:999px; padding:7px 12px; font-weight:600;
+    }
+    .nav-actions { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+    .nav-actions button.primary, .btn.primary {
+      background:var(--blue); color:var(--white); border:0;
+    }
+    .nav-actions button.secondary, .btn.secondary {
+      background:var(--sky); color:var(--navy); border:0;
+    }
+    .nav-actions .user-pill {
+      border:1px solid rgba(255,255,255,.25); color:var(--white); padding:7px 12px; border-radius:999px; background:rgba(255,255,255,.06);
+      max-width:220px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .hero {
+      background:linear-gradient(135deg, #eaf2fc 0%, #dfeeff 100%); border-radius:18px; margin:28px auto 22px; padding:28px 24px;
+    }
+    .hero h1 { margin:0 0 10px; font-size:clamp(2rem,3vw,3rem); }
+    .section { padding:18px 0 10px; }
+    .section h2 { margin:0 0 8px; font-size:1.8rem; }
+    .muted { color:var(--muted); }
+    .small { font-size:.9rem; }
+    .cards { display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:16px; }
+    .card {
+      background:var(--white); border:1px solid var(--line); border-radius:16px; padding:18px; box-shadow:0 8px 16px rgba(16,43,78,0.04);
+    }
+    .tag { display:inline-block; padding:4px 8px; border-radius:999px; background:#edf5ff; color:var(--blue); font-size:.75rem; font-weight:700; }
+    .status { display:inline-block; font-size:.75rem; color:var(--amber); background:#fff6e8; padding:3px 7px; border-radius:999px; margin-left:6px; }
+    .profile-name { background:none; border:none; padding:0; color:var(--navy); font-size:1.05rem; font-weight:700; text-align:left; }
+    .profile-card h3 { margin:8px 0 6px; }
+    .controls, .filters, .tool-controls { display:flex; gap:10px; flex-wrap:wrap; }
+    .field, .filter, .toolbar input, .toolbar select, .toolbar textarea {
+      border:1px solid #cbd6e4; background:#fff; border-radius:10px; padding:10px 12px; color:var(--ink);
+    }
+    .field, .filter { min-width:160px; }
+    .btn {
+      border:none; border-radius:10px; padding:10px 14px; font-weight:700; transition:transform .12s ease;
+    }
+    .btn:hover { transform:translateY(-1px); }
+    .btn.danger { background:#fff0f0; color:var(--danger); }
+    .btn.secondary { background:var(--sky); color:var(--navy); }
+    .panel { background:#fff; border:1px solid var(--line); border-radius:16px; padding:16px; }
+    .modal {
+      position:fixed; inset:0; background:rgba(16,43,78,.58); display:none; justify-content:center; align-items:flex-start; padding:28px 16px; z-index:100;
+    }
+    .modal.show { display:flex; }
+    .dialog {
+      background:var(--white); min-width:min(760px, 100%); max-width:900px; border-radius:18px; border:1px solid var(--line);
+      box-shadow:0 20px 40px rgba(16,43,78,.18); position:relative; padding:20px 18px 18px;
+    }
+    .dialog-close {
+      position:absolute; right:14px; top:10px; background:transparent; border:none; font-size:2rem; color:var(--muted); cursor:pointer;
+    }
+    .list { display:grid; gap:12px; }
+    .list-item { border:1px solid var(--line); border-radius:12px; padding:14px; background:#fff; }
+    .item-meta { color:var(--muted); font-size:.82rem; }
+    .item-body { white-space:pre-wrap; margin-top:8px; }
+    .empty { color:var(--muted); padding:18px; border:1px dashed #cbd6e4; border-radius:12px; text-align:center; }
+    .auth-overlay {
+      position:fixed; inset:0; background:rgba(16,43,78,.7); display:flex; align-items:center; justify-content:center; z-index:150;
+    }
+    .auth-overlay.hidden { display:none; }
+    .auth-card {
+      width:min(440px, calc(100vw - 24px)); background:var(--white); border-radius:18px; border:1px solid var(--line);
+      box-shadow:0 18px 38px rgba(16,43,78,.2); padding:22px 20px 18px;
+    }
+    .auth-card h2 { margin:0 0 8px; }
+    .auth-form { display:grid; gap:12px; }
+    .auth-form input { width:100%; border:1px solid #cbd6e4; border-radius:10px; padding:11px 12px; }
+    .auth-actions { display:flex; gap:10px; flex-wrap:wrap; margin-top:6px; }
+    .switch-link { background:none; border:none; color:var(--blue); padding:8px 0; font-weight:700; }
+    .notice {
+      padding:12px 14px; border-radius:10px; margin:12px 0; font-size:.96rem;
+      background:var(--sky); color:var(--ink);
+    }
+    .notice.error { background:#fff0f0; color:var(--danger); }
+    .notice.success { background:#e8f7ef; color:var(--green); }
+    .hidden { display:none !important; }
+    .mini-actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+    .muted-link { color:var(--blue); font-weight:600; }
+    footer { padding:20px 0 28px; color:var(--muted); }
+    @media (max-width: 720px) {
+      .navlinks { display:none; }
+      .nav { justify-content:space-between; }
+      .hero { padding:22px 18px; }
+      .dialog { min-width:0; width:100%; }
+    }
+  </style>
 </head>
 <body>
-  <div class="topbar"><div class="wrap nav"><a class="logo" href="#">Venture<span>Link.</span></a><nav class="navlinks"><a href="#network">Network</a><a href="#recommendations">Matches</a><a href="#opportunities">Opportunities</a><a href="#trust">Trust & reviews</a><a href="#tools">Business tools</a></nav><button class="btn light" type="button" id="inboxBtn">Inbox <span id="msgCount"></span></button></div></div>
-  <header class="hero"><div class="wrap"><div class="small">A network built for business growth</div><h1>Meet the people who move your business forward.</h1><p>Find suppliers, discover potential investors, and learn from experienced mentors—all in one place.</p><a class="btn light" href="#network">Explore the network ↓</a></div></header>
+  <div class="topbar">
+    <div class="wrap nav">
+      <a class="logo" href="#">Venture<span>Link.</span></a>
+      <nav class="navlinks" aria-label="Main navigation">
+        <a href="#network">Network</a>
+        <a href="#matches">Matches</a>
+        <a href="#opportunities">Opportunities</a>
+        <a href="#tools">Tools</a>
+      </nav>
+      <div class="nav-actions">
+        <button type="button" id="inboxBtn" class="secondary hidden">Inbox</button>
+        <button type="button" id="savedWorkBtn" class="secondary hidden">Saved work</button>
+        <div id="userBadge" class="user-pill hidden"></div>
+        <button type="button" id="authBtn" class="primary">Log in</button>
+        <button type="button" id="logoutBtn" class="secondary hidden">Log out</button>
+      </div>
+    </div>
+  </div>
+
   <main class="wrap">
+    <header class="hero">
+      <div class="small">A network built for business growth</div>
+      <h1>Meet the people who move your business forward.</h1>
+      <p class="muted">Find suppliers, discover potential investors, and connect with the right mentor.</p>
+    </header>
+
     <section class="section" id="network">
       <h2>Explore the network</h2>
-      <p class="muted small">Demo profiles are illustrative. Click a name to compose a message.</p>
+      <p class="muted small">Demo profiles are illustrative. Use the inbox after logging in to save messages locally.</p>
       <div class="controls">
-        <input class="field" id="searchInput" placeholder="Search people, industries, or skills">
-        <select class="field" id="typeFilter"><option value="">All connection types</option></select>
-        <select class="field" id="industryFilter"><option value="">All industries</option></select>
-        <button class="btn primary" type="button" id="searchBtn">Search</button>
+        <input class="field" id="searchInput" type="text" placeholder="Search people, industries, or skills">
+        <select class="field" id="typeFilter">
+          <option value="">All types</option>
+        </select>
+        <select class="field" id="industryFilter">
+          <option value="">All industries</option>
+        </select>
+        <button class="btn primary" id="searchBtn" type="button">Search</button>
       </div>
       <div class="cards" id="profilesList"></div>
     </section>
 
-    <section class="section" id="recommendations">
+    <section class="section" id="matches">
       <h2>Recommended connections</h2>
-      <p class="muted small">Choose a goal and optional filters, then select “Find matches.”</p>
       <div class="panel">
         <div class="controls">
-          <select class="field" id="goalSelect"><option value="Supplier">Find a supplier</option><option value="Investor">Find an investor</option><option value="Mentor">Find a mentor</option><option value="All">Explore all connections</option></select>
-          <select class="field" id="recIndustry"><option value="">Any industry</option></select>
-          <select class="field" id="recLocation"><option value="">Any location</option></select>
-          <button class="btn primary" type="button" id="recommendBtn">Find matches</button>
+          <select class="field" id="goalSelect">
+            <option value="Supplier">Find a supplier</option>
+            <option value="Investor">Find an investor</option>
+            <option value="Mentor">Find a mentor</option>
+          </select>
+          <select class="field" id="recIndustry">
+            <option value="">Any industry</option>
+          </select>
+          <select class="field" id="recLocation">
+            <option value="">Any location</option>
+          </select>
+          <button class="btn primary" id="recommendBtn" type="button">Find matches</button>
         </div>
-        <div class="cards" id="recommendationsList"><div class="empty">Choose your goal and select “Find matches” to see recommendations.</div></div>
+        <div class="cards" id="recommendationsList"></div>
       </div>
     </section>
 
     <section class="section" id="opportunities">
-      <div class="opportunity-head">
+      <div class="controls" style="justify-content:space-between; align-items:center; margin-bottom:8px;">
         <div>
-          <h2>Business opportunity board</h2>
-          <div class="muted small">Post what your business needs or browse demo opportunities.</div>
+          <h2 style="margin:0;">Business opportunity board</h2>
+          <div class="muted small">Post what your business needs or review sample opportunities.</div>
         </div>
-        <button class="btn primary" type="button" id="postOpportunityBtn">Post an opportunity</button>
+        <button class="btn primary" id="postOpportunityBtn" type="button">Post an opportunity</button>
       </div>
-      <div class="opportunity-list" id="opportunityList"></div>
-    </section>
-
-    <section class="section" id="trust">
-      <h2>Trust, verification & reviews</h2>
-      <p class="muted small">Badges should reflect checks that VentureLink actually performs—not unverified self-claims.</p>
-      <div class="cards">
-        <article class="card"><span class="tag">Identity check</span><h3>Verified business identity</h3><p class="muted">A profile may show a verified badge only after a check of legal entity details or a trusted referral.</p></article>
-        <article class="card"><span class="tag">Risk review</span><h3>Review and dispute process</h3><p class="muted">Consumers and businesses should be able to flag suspicious behavior and request a human review.</p></article>
-        <article class="card"><span class="tag">Reference checks</span><h3>Customer and partner feedback</h3><p class="muted">A review should be tied to a real transaction or direct working relationship, not just an online profile fill-in.</p></article>
-      </div>
+      <div class="list" id="opportunityList"></div>
     </section>
 
     <section class="section" id="tools">
       <h2>Business tools</h2>
-      <p class="muted small">These browser-only controls are prototypes, not secure sharing, investment monitoring, or appointment services.</p>
       <div class="cards">
-        <article class="card"><span class="tag">Private data room · prototype</span><h3>Prepare a document list</h3><p class="muted small">Choose files to see their names in this tab. The files are not uploaded or shared in this demo.</p><input class="field" type="file" id="roomFiles" multiple><ul class="watchlist" id="roomFileList"><li>No files selected.</li></ul></article>
-        <article class="card"><span class="tag">Investment watchlist</span><h3>Track demo profiles</h3><p class="muted small">Add sample organizations to a watchlist saved in this browser. No live investment data is shared.</p><div class="form-row"><select class="field" id="watchSelect"></select><button class="btn primary" type="button" id="addWatchBtn">Add</button></div><ul class="watchlist" id="watchList"></ul></article>
-        <article class="card"><span class="tag">Business hours & availability</span><h3>Set your weekly hours</h3><p class="muted small">Edit a local schedule. This does not publish availability or connect to a calendar service.</p><div class="hours-editor" id="hoursEditor"></div><button class="btn primary" type="button" id="saveHoursBtn">Save schedule</button></article>
+        <article class="card">
+          <span class="tag">Private data room · prototype</span>
+          <h3>Prepare a document list</h3>
+          <p class="muted small">Choose files to list their names in this browser demo.</p>
+          <input id="roomFiles" type="file" multiple>
+          <ul id="roomFileList" class="small"><li>No files selected.</li></ul>
+          <button class="btn secondary" id="clearRoomBtn" type="button">Clear</button>
+        </article>
+        <article class="card">
+          <span class="tag">Investment watchlist</span>
+          <h3>Track demo profiles</h3>
+          <div class="controls" style="margin-top:8px;">
+            <select class="field" id="watchSelect"></select>
+            <button class="btn primary" id="addWatchBtn" type="button">Add</button>
+          </div>
+          <ul id="watchList" class="small" style="padding-left:18px;"></ul>
+        </article>
+        <article class="card">
+          <span class="tag">Business hours & availability</span>
+          <h3>Set your weekly hours</h3>
+          <div id="hoursEditor"></div>
+          <button class="btn primary" id="saveHoursBtn" type="button" style="margin-top:12px;">Save hours</button>
+        </article>
       </div>
     </section>
   </main>
 
-  <footer class="wrap"><strong>VentureLink.</strong> Connecting people. Building businesses. Creating opportunities.<br><span class="small">Demo data and posts are saved only in this browser. Do not enter sensitive personal or financial information.</span></footer>
+  <footer>
+    <div class="wrap">VentureLink. Connecting people. Building businesses. Creating opportunities.</div>
+  </footer>
 
-  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div id="authOverlay" class="auth-overlay">
+    <div class="auth-card">
+      <h2 id="authTitle">Log in</h2>
+      <div id="authNotice" class="notice hidden" role="status"></div>
+      <form id="authForm" class="auth-form">
+        <input id="emailInput" type="email" placeholder="Email" autocomplete="email" required>
+        <input id="passwordInput" type="password" placeholder="Password" autocomplete="current-password" minlength="8" required>
+        <div class="auth-actions">
+          <button id="authSubmit" class="btn primary" type="submit">Log in</button>
+        </div>
+      </form>
+      <button id="toggleAuthMode" class="switch-link" type="button">Need an account? Create one</button>
+      <p class="small muted">This version stores accounts locally in your browser. No email verification code is used.</p>
+    </div>
+  </div>
+
+  <div class="modal" id="modal" role="dialog" aria-modal="true">
     <div class="dialog">
       <button type="button" class="dialog-close" id="closeModal" aria-label="Close">×</button>
       <div id="modalContent"></div>
@@ -80,287 +248,559 @@
   </div>
 
   <script>
-    let sampleProfiles = [];
+    const sampleProfiles = [
+      { id:'s1', name:'Metro Supply Co.', type:'Supplier', industry:'Manufacturing', location:'Fort Wayne, IN', description:'Small-batch manufacturing and product assembly for growing brands.' },
+      { id:'s2', name:'GreenPack Solutions', type:'Supplier', industry:'Retail', location:'Indianapolis, IN', description:'Sustainable packaging, shipping materials, and wholesale sourcing.' },
+      { id:'i1', name:'Northstar Capital', type:'Investor', industry:'Technology', location:'Remote', description:'Interested in early-stage technology and productivity businesses.' },
+      { id:'i2', name:'Elevate Ventures', type:'Investor', industry:'Finance', location:'Indianapolis, IN', description:'Connects founders with capital and practical business guidance.' },
+      { id:'m1', name:'Jordan Thompson', type:'Mentor', industry:'Marketing', location:'Fort Wayne, IN', description:'Marketing advisor helping startups build brands and reach customers.' },
+      { id:'m2', name:'Taylor Morgan', type:'Mentor', industry:'Finance', location:'Remote', description:'Helps entrepreneurs understand cash flow, budgets, and financial planning.' },
+      { id:'m3', name:'Alex Rivera', type:'Mentor', industry:'Technology', location:'Chicago, IL', description:'Product and operations mentor for founders taking ideas to launch.' }
+    ];
 
-    const $ = selector => document.querySelector(selector);
-    const escapeHTML = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
-    const normalize = value => String(value ?? '').trim().toLowerCase().replace(/[^a-z0-9]/g, '');
-    const getField = (row, candidates) => {
-      const entries = Object.entries(row || {});
-      for (const candidate of candidates) {
-        const match = entries.find(([key]) => normalize(key) === normalize(candidate));
-        if (match) {
-          const value = String(match[1] ?? '').trim();
-          if (value) return value;
-        }
-      }
-      return '';
+    const $ = (selector) => document.querySelector(selector);
+    const $$ = (selector) => Array.from(document.querySelectorAll(selector));
+    const escapeHTML = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[char]));
+    const readStored = (key, fallback) => { try { return JSON.parse(localStorage.getItem(key)) ?? fallback; } catch { return fallback; } };
+    const store = (key, value) => { try { localStorage.setItem(key, JSON.stringify(value)); return true; } catch { return false; } };
+
+    const STORAGE = {
+      users: 'vl_local_users',
+      session: 'vl_local_session',
+      messages: 'vl_local_messages',
+      work: 'vl_local_saved_work',
+      opportunities: 'vl_local_opportunities',
+      watchlist: 'vl_local_watchlist',
+      businessHours: 'vl_local_business_hours'
     };
 
-    function readStored(key, fallback) {
-      try {
-        return JSON.parse(localStorage.getItem(key)) ?? fallback;
-      } catch {
-        return fallback;
-      }
-    }
-
-    function store(key, value) {
-      try {
-        localStorage.setItem(key, JSON.stringify(value));
-        return true;
-      } catch {
-        return false;
-      }
-    }
-
-    async function loadNetworkProfiles() {
-      try {
-        const response = await fetch('https://sheetdb.io/api/v1/tp4g3dvbqo7ro?sheet=Sheet1');
-        if (!response.ok) throw new Error('SheetDB fetch failed.');
-        const rows = await response.json();
-        if (!Array.isArray(rows)) throw new Error('SheetDB returned an unexpected response.');
-
-        sampleProfiles = rows
-          .map((row, index) => ({
-            id: getField(row, ['id', 'profile id', 'business id']) || `sheet-${index}`,
-            name: getField(row, ['name', 'company name', 'business name', 'organization', 'full name', 'profile name']),
-            type: getField(row, ['type', 'connection type', 'profile type', 'role', 'category']) || 'Connection',
-            industry: getField(row, ['industry', 'sector', 'business industry']) || 'Other',
-            location: getField(row, ['location', 'city', 'address', 'region']) || 'Not specified',
-            description: getField(row, ['description', 'about', 'bio', 'summary', 'details']) || 'Connect to learn more about this profile.'
-          }))
-          .filter(profile => profile.name);
-
-        if (!sampleProfiles.length) {
-          throw new Error('No valid profile names were returned from Sheet1.');
-        }
-
-        const typeSelect = $('#typeFilter');
-        const industrySelect = $('#industryFilter');
-        const recIndustrySelect = $('#recIndustry');
-        const recLocationSelect = $('#recLocation');
-
-        const addOptions = (select, values) => {
-          if (!select) return;
-          const seen = new Set(Array.from(select.options).map(option => option.value.toLowerCase()));
-          values.forEach(value => {
-            if (!seen.has(String(value).toLowerCase())) {
-              select.add(new Option(value, value));
-              seen.add(String(value).toLowerCase());
-            }
-          });
-        };
-
-        addOptions(typeSelect, [...new Set(sampleProfiles.map(profile => profile.type))]);
-        addOptions(industrySelect, [...new Set(sampleProfiles.map(profile => profile.industry))]);
-        addOptions(recIndustrySelect, [...new Set(sampleProfiles.map(profile => profile.industry))]);
-        addOptions(recLocationSelect, [...new Set(sampleProfiles.map(profile => profile.location))]);
-
-        renderProfiles();
-        renderRecommendations();
-        setupWatchlist();
-      } catch (error) {
-        const list = $('#profilesList');
-        if (list) {
-          list.innerHTML = '<div class="empty">Could not load network profiles: ' + escapeHTML(error.message || 'Unknown error') + '</div>';
-        }
-      }
-    }
-
-    let opportunities = readStored('vl_opportunities', [
-      {id:'o1',title:'Seeking a small-batch product manufacturer',type:'Supplier',industry:'Manufacturing',location:'Fort Wayne, IN',description:'A demo founder is preparing a first product run and needs a reliable manufacturing partner.',postedBy:'Demo founder'},
-      {id:'o2',title:'Looking for an early-stage business mentor',type:'Mentor',industry:'Retail',location:'Remote',description:'A demo retail founder wants advice on customer research, pricing, and a launch plan.',postedBy:'Demo founder'},
-      {id:'o3',title:'Exploring seed funding for a software idea',type:'Investor',industry:'Technology',location:'Remote',description:'A demo founder is preparing a pitch and hopes to meet early-stage investors.',postedBy:'Demo founder'}
+    let opportunities = readStored(STORAGE.opportunities, [
+      { id:'o1', title:'Seeking a small-batch product manufacturer', type:'Supplier', industry:'Manufacturing', location:'Fort Wayne, IN', description:'A demo founder is preparing a first product run and needs a small, dependable partner.' },
+      { id:'o2', title:'Looking for an early-stage business mentor', type:'Mentor', industry:'Retail', location:'Remote', description:'A retail founder wants guidance on customer research, pricing, and early growth strategy.' },
+      { id:'o3', title:'Exploring seed funding for a software idea', type:'Investor', industry:'Technology', location:'Remote', description:'A founder is preparing a pitch and hopes to meet early-stage investors.' }
     ]);
-    let messages = readStored('vl_messages', []), watchlist = readStored('vl_watchlist', []);
+    let watchlist = readStored(STORAGE.watchlist, []);
     const weekdays = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
-    const defaultHours = weekdays.map((day, index) => ({ day, open: index < 5, start: '09:00', end: '17:00' }));
-    let businessHours = readStored('vl_business_hours', defaultHours);
+    const defaultHours = weekdays.map((day, index) => ({ day, open:index < 5, start:'09:00', end:'17:00' }));
+    let businessHours = readStored(STORAGE.businessHours, defaultHours);
+    let authMode = 'login';
+    let currentUser = null;
+
+    function notify(el, msg, type = '') {
+      el.textContent = msg;
+      el.className = 'notice ' + (type ? type : '').trim();
+      if (!msg) el.classList.add('hidden');
+      else el.classList.remove('hidden');
+    }
 
     function openModal(content) {
       $('#modalContent').innerHTML = content;
       $('#modal').classList.add('show');
-      $('#modal').querySelector('.dialog-close').focus();
+      $('#closeModal').focus();
     }
 
-    function closeModal() {
-      $('#modal').classList.remove('show');
-    }
+    function closeModal() { $('#modal').classList.remove('show'); }
 
     function renderProfiles() {
       const query = $('#searchInput').value.trim().toLowerCase();
       const type = $('#typeFilter').value;
       const industry = $('#industryFilter').value;
-      const matches = sampleProfiles.filter(profile => (!type || profile.type === type) && (!industry || profile.industry === industry) && (!query || [profile.name, profile.type, profile.industry, profile.location, profile.description].join(' ').toLowerCase().includes(query)));
-      $('#profilesList').innerHTML = matches.length ? matches.map(profile => `<article class="card"><span class="tag">${escapeHTML(profile.type)}</span> <span class="status">Not verified</span><h3><button class="profile-name" type="button" data-profile-id="${escapeHTML(profile.id)}">${escapeHTML(profile.name)}</button></h3><div class="muted small">${escapeHTML(profile.industry)} · ${escapeHTML(profile.location)}</div><p class="muted">${escapeHTML(profile.description)}</p><p class="small muted">No verified credential or review data is available in this demo.</p></article>`).join('') : '<div class="empty">No matching profiles. Try changing your search or filters.</div>';
+      const matches = sampleProfiles.filter(profile => {
+        const haystack = [profile.name, profile.type, profile.industry, profile.location, profile.description].join(' ').toLowerCase();
+        return (!type || profile.type === type) && (!industry || profile.industry === industry) && (!query || haystack.includes(query));
+      });
+
+      $('#profilesList').innerHTML = matches.length ? matches.map(profile => `
+        <article class="card profile-card">
+          <span class="tag">${escapeHTML(profile.type)}</span>
+          <span class="status">Not verified</span>
+          <h3><button class="profile-name" data-profile-id="${escapeHTML(profile.id)}" type="button">${escapeHTML(profile.name)}</button></h3>
+          <div class="muted small">${escapeHTML(profile.industry)} · ${escapeHTML(profile.location)}</div>
+          <p class="muted small">${escapeHTML(profile.description)}</p>
+        </article>
+      `).join('') : '<div class="empty">No profiles match your filters.</div>';
     }
 
     function renderRecommendations() {
       const goal = $('#goalSelect').value;
       const industry = $('#recIndustry').value;
       const location = $('#recLocation').value;
-      const matches = sampleProfiles.map(profile => {
+      const ranked = sampleProfiles.map(profile => {
         let score = 0;
         if (goal === 'All' || profile.type === goal) score += 5;
         if (industry && profile.industry === industry) score += 3;
         if (location && profile.location === location) score += 2;
         return { profile, score };
       }).filter(item => item.score > 0).sort((a, b) => b.score - a.score || a.profile.name.localeCompare(b.profile.name)).slice(0, 3);
-      $('#recommendationsList').innerHTML = matches.length ? matches.map(({ profile, score }) => `<article class="card"><div class="match">Suggested match · ${score} points</div><h3><button class="profile-name" type="button" data-profile-id="${escapeHTML(profile.id)}">${escapeHTML(profile.name)}</button></h3><span class="status">Not verified</span><div class="muted small">${escapeHTML(profile.type)} · ${escapeHTML(profile.industry)} · ${escapeHTML(profile.location)}</div><p class="muted">${escapeHTML(profile.description)}</p></article>`).join('') : '<div class="empty">No close matches yet. Try a broader industry or location.</div>';
+
+      $('#recommendationsList').innerHTML = ranked.length ? ranked.map(({ profile, score }) => `
+        <article class="card">
+          <div class="muted small">Suggested match · ${score} points</div>
+          <h3><button class="profile-name" data-profile-id="${escapeHTML(profile.id)}" type="button">${escapeHTML(profile.name)}</button></h3>
+          <div class="muted small">${escapeHTML(profile.type)} · ${escapeHTML(profile.industry)} · ${escapeHTML(profile.location)}</div>
+        </article>
+      `).join('') : '<div class="empty">Choose a goal or filters to see recommendations.</div>';
     }
 
     function renderOpportunities() {
-      $('#opportunityList').innerHTML = opportunities.length ? opportunities.map(opportunity => `<article class="card opportunity-item"><span class="tag">${escapeHTML(opportunity.type)} needed</span><h3>${escapeHTML(opportunity.title)}</h3><div class="meta">${escapeHTML(opportunity.industry)} · ${escapeHTML(opportunity.location)}</div><p class="muted">${escapeHTML(opportunity.description)}</p><p class="small muted">Posted by ${escapeHTML(opportunity.postedBy)}</p><button class="btn primary" type="button" data-id="${escapeHTML(opportunity.id)}" class="interestBtn">I’m interested</button></article>`).join('') : '<div class="empty">No opportunities posted yet. Be the first to add one.</div>';
+      $('#opportunityList').innerHTML = opportunities.length ? opportunities.map(op => `
+        <article class="list-item">
+          <span class="tag">${escapeHTML(op.type)} needed</span>
+          <h3>${escapeHTML(op.title)}</h3>
+          <div class="item-meta">${escapeHTML(op.industry)} · ${escapeHTML(op.location)}</div>
+          <p class="item-body">${escapeHTML(op.description)}</p>
+          <div class="mini-actions">
+            <button class="btn secondary interestBtn" data-id="${escapeHTML(op.id)}" type="button">I'm interested</button>
+          </div>
+        </article>
+      `).join('') : '<div class="empty">No opportunities posted yet.</div>';
     }
 
     function postOpportunity() {
-      openModal(`<h2 id="modalTitle">Post a business opportunity</h2><p class="muted small">Describe the connection or support you need.</p><form id="opportunityForm"><div class="form-row"><div><label class="label" for="oppTitle">Opportunity title</label><input id="oppTitle" class="input" name="title" required maxlength="120"></div><div><label class="label" for="oppType">Need</label><select id="oppType" class="input" name="type"><option>Supplier</option><option>Investor</option><option>Mentor</option></select></div></div><div class="form-row"><div><label class="label" for="oppIndustry">Industry</label><input id="oppIndustry" class="input" name="industry" required maxlength="80"></div><div><label class="label" for="oppLocation">Location</label><input id="oppLocation" class="input" name="location" required maxlength="80"></div></div><label class="label" for="oppDescription">Description</label><textarea id="oppDescription" name="description" required maxlength="500"></textarea><div style="margin-top:16px;text-align:right"><button class="btn primary" type="submit">Publish</button></div></form>`);
-      $('#opportunityForm').addEventListener('submit', event => {
+      openModal(`
+        <h2 id="modalTitle">Post a business opportunity</h2>
+        <p class="muted small">Describe what you need.</p>
+        <form id="opportunityForm">
+          <div class="controls" style="display:grid; gap:12px;">
+            <input class="field" name="title" placeholder="Opportunity title" required>
+            <input class="field" name="type" placeholder="Type (Supplier, Mentor, Investor)" required>
+            <input class="field" name="industry" placeholder="Industry" required>
+            <input class="field" name="location" placeholder="Location" required>
+            <textarea class="field" name="description" rows="5" placeholder="Describe the opportunity" required></textarea>
+            <div class="mini-actions">
+              <button type="submit" class="btn primary">Submit</button>
+              <button type="button" class="btn secondary" id="cancelOpportunity">Cancel</button>
+            </div>
+          </div>
+        </form>
+      `);
+
+      $('#opportunityForm').addEventListener('submit', (event) => {
         event.preventDefault();
-        const form = new FormData(event.currentTarget);
+        const fd = new FormData(event.currentTarget);
         opportunities.unshift({
           id: `o${Date.now()}`,
-          title: String(form.get('title')).trim(),
-          type: String(form.get('type')).trim(),
-          industry: String(form.get('industry')).trim(),
-          location: String(form.get('location')).trim(),
-          description: String(form.get('description')).trim(),
-          postedBy: 'You'
+          title: String(fd.get('title')).trim(),
+          type: String(fd.get('type')).trim(),
+          industry: String(fd.get('industry')).trim(),
+          location: String(fd.get('location')).trim(),
+          description: String(fd.get('description')).trim()
         });
-        store('vl_opportunities', opportunities);
+        store(STORAGE.opportunities, opportunities);
         renderOpportunities();
         closeModal();
-      }, { once: true });
+      }, { once:true });
+
+      $('#cancelOpportunity').addEventListener('click', closeModal, { once:true });
     }
 
     function respondToOpportunity(id) {
       const opportunity = opportunities.find(item => item.id === id);
       if (!opportunity) return;
-      openModal(`<h2 id="modalTitle">Interested in this opportunity?</h2><p class="muted">${escapeHTML(opportunity.title)}</p><p class="muted small">${escapeHTML(opportunity.type)} · ${escapeHTML(opportunity.industry)} · ${escapeHTML(opportunity.location)}</p><p class="muted">${escapeHTML(opportunity.description)}</p><div style="text-align:right"><button class="btn primary" type="button" id="doneBtn">Done</button></div>`);
-      $('#doneBtn').addEventListener('click', closeModal, { once: true });
+      openModal(`
+        <h2 id="modalTitle">Interested in this opportunity?</h2>
+        <p class="muted">${escapeHTML(opportunity.title)}</p>
+        <p class="muted small">${escapeHTML(opportunity.type)} · ${escapeHTML(opportunity.industry)} · ${escapeHTML(opportunity.location)}</p>
+        <p class="muted small">${escapeHTML(opportunity.description)}</p>
+        <div class="mini-actions">
+          <button class="btn primary" id="doneBtn" type="button">Done</button>
+        </div>
+      `);
+      $('#doneBtn').addEventListener('click', closeModal, { once:true });
     }
 
     function messageProfile(id) {
       const profile = sampleProfiles.find(item => item.id === id);
       if (!profile) return;
-      openModal(`<h2 id="modalTitle">Message ${escapeHTML(profile.name)}</h2><p class="muted small">${escapeHTML(profile.type)} · ${escapeHTML(profile.industry)} · ${escapeHTML(profile.location)}</p><form id="messageForm"><label class="label" for="msgSubject">Subject</label><input id="msgSubject" class="input" name="subject" required maxlength="120"><label class="label" for="msgBody">Message</label><textarea id="msgBody" name="body" required maxlength="1500"></textarea><div style="margin-top:16px;text-align:right"><button class="btn primary" type="submit">Save message</button></div></form>`);
-      $('#messageForm').addEventListener('submit', event => {
+      openModal(`
+        <h2 id="modalTitle">Message ${escapeHTML(profile.name)}</h2>
+        <p class="muted small">${escapeHTML(profile.type)} · ${escapeHTML(profile.industry)} · ${escapeHTML(profile.location)}</p>
+        <form id="profileMessageForm">
+          <div style="display:grid; gap:12px;">
+            <input class="field" id="msgSubject" value="${escapeHTML(profile.name)} introduction" placeholder="Subject" required>
+            <textarea class="field" id="msgBody" rows="5" placeholder="Write your message" required></textarea>
+            <div class="mini-actions">
+              <button class="btn primary" type="submit">Send</button>
+              <button class="btn secondary" type="button" id="cancelMessage">Cancel</button>
+            </div>
+          </div>
+        </form>
+      `);
+
+      $('#profileMessageForm').addEventListener('submit', (event) => {
         event.preventDefault();
         const subject = $('#msgSubject').value.trim();
         const body = $('#msgBody').value.trim();
-        messages.unshift({
+        const messages = readStored(STORAGE.messages, []);
+        const targetMessage = {
           id: `m${Date.now()}`,
-          sender: 'You',
-          profile: profile.name,
+          from: currentUser ? currentUser.email : 'guest@local',
+          to: currentUser ? currentUser.email : 'guest@local',
           subject,
           body,
-          createdAt: new Date().toISOString()
-        });
-        store('vl_messages', messages);
-        renderInboxCount();
+          sentAt: new Date().toISOString(),
+          localNote: true
+        };
+        messages.unshift(targetMessage);
+        store(STORAGE.messages, messages);
         closeModal();
-        openModal(`<h2 id="modalTitle">Message saved</h2><p class="muted">Your message to ${escapeHTML(profile.name)} has been saved in this browser.</p><div style="text-align:right"><button class="btn primary" type="button" id="doneBtn">Done</button></div>`);
-        $('#doneBtn').addEventListener('click', closeModal, { once: true });
-      }, { once: true });
-    }
+        if (currentUser) {
+          openModal(`<h2>Message saved</h2><p class="muted">This message was saved in your local inbox.</p><div class="mini-actions"><button class="btn primary" id="doneBtn" type="button">Done</button></div>`);
+          $('#doneBtn').addEventListener('click', closeModal, { once:true });
+        } else {
+          openModal(`<h2>Local save</h2><p class="muted">Log in to save messages to your inbox and sent list.</p><div class="mini-actions"><button class="btn primary" id="doneBtn" type="button">Done</button></div>`);
+          $('#doneBtn').addEventListener('click', closeModal, { once:true });
+        }
+      }, { once:true });
 
-    function showSavedMessage(text) {
-      openModal(`<h2 id="modalTitle">Message saved</h2><p class="muted">${escapeHTML(text)}</p><button type="button" class="btn primary" id="doneBtn">Done</button>`);
-      $('#doneBtn').addEventListener('click', closeModal, { once: true });
+      $('#cancelMessage').addEventListener('click', closeModal, { once:true });
     }
 
     function renderInboxCount() {
-      $('#msgCount').textContent = messages.length ? `(${messages.length})` : '';
+      if (!currentUser) {
+        $('#inboxBtn').classList.add('hidden');
+        return;
+      }
+      const messages = readStored(STORAGE.messages, []).filter(msg => msg.to === currentUser.email);
+      $('#inboxBtn').textContent = messages.length ? `Inbox (${messages.length})` : 'Inbox';
+      $('#inboxBtn').classList.remove('hidden');
     }
 
-    function showInbox() {
-      openModal(`<h2 id="modalTitle">Your inbox</h2><p class="muted small">Local demo messages appear here. They are not delivered to recipients.</p>${messages.length ? messages.map(message => `<article class="card" style="margin:10px 0"><h3>${escapeHTML(message.subject || 'No subject')}</h3><div class="muted small">To ${escapeHTML(message.profile)}</div><p class="muted">${escapeHTML(message.body)}</p></article>`).join('') : '<div class="empty">No messages saved yet.</div>'}<div style="text-align:right;margin-top:12px"><button type="button" class="btn primary" id="doneBtn">Close</button></div>`);
-      $('#doneBtn').addEventListener('click', closeModal, { once: true });
+    function renderSavedWorkButton() {
+      if (!currentUser) {
+        $('#savedWorkBtn').classList.add('hidden');
+        return;
+      }
+      $('#savedWorkBtn').classList.remove('hidden');
+    }
+
+    function openInboxModal() {
+      if (!currentUser) {
+        showAuthOverlay();
+        return;
+      }
+      const messages = readStored(STORAGE.messages, []).filter(msg => msg.to === currentUser.email || msg.from === currentUser.email).sort((a, b) => new Date(b.sentAt) - new Date(a.sentAt));
+      const incoming = readStored(STORAGE.messages, []).filter(msg => msg.to === currentUser.email).sort((a, b) => new Date(b.sentAt) - new Date(a.sentAt));
+      const outgoing = readStored(STORAGE.messages, []).filter(msg => msg.from === currentUser.email).sort((a, b) => new Date(b.sentAt) - new Date(a.sentAt));
+
+      openModal(`
+        <h2>Inbox & sent</h2>
+        <div class="panel" style="margin-bottom:12px;">
+          <h3>Send a message</h3>
+          <form id="localMessageForm">
+            <div style="display:grid; gap:10px;">
+              <input class="field" id="recipientEmail" type="email" placeholder="Recipient email" required>
+              <input class="field" id="inboxSubject" type="text" placeholder="Subject" required>
+              <textarea class="field" id="inboxBody" rows="4" placeholder="Write your message" required></textarea>
+              <div class="mini-actions">
+                <button class="btn primary" type="submit">Send</button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="panel" style="margin-bottom:12px;">
+          <h3>Inbox</h3>
+          ${incoming.length ? incoming.map(msg => `
+            <article class="list-item">
+              <div class="item-meta">From ${escapeHTML(msg.from)} · ${escapeHTML(new Date(msg.sentAt).toLocaleString())}</div>
+              <h4>${escapeHTML(msg.subject)}</h4>
+              <div class="item-body">${escapeHTML(msg.body)}</div>
+            </article>
+          `).join('') : '<div class="empty">Your inbox is empty.</div>'}
+        </div>
+        <div class="panel">
+          <h3>Sent</h3>
+          ${outgoing.length ? outgoing.map(msg => `
+            <article class="list-item">
+              <div class="item-meta">To ${escapeHTML(msg.to)} · ${escapeHTML(new Date(msg.sentAt).toLocaleString())}</div>
+              <h4>${escapeHTML(msg.subject)}</h4>
+              <div class="item-body">${escapeHTML(msg.body)}</div>
+            </article>
+          `).join('') : '<div class="empty">You haven’t sent any messages.</div>'}
+        </div>
+      `);
+
+      $('#localMessageForm').addEventListener('submit', (event) => {
+        event.preventDefault();
+        const recipient = $('#recipientEmail').value.trim().toLowerCase();
+        const subject = $('#inboxSubject').value.trim();
+        const body = $('#inboxBody').value.trim();
+        const users = readStored(STORAGE.users, []);
+        if (!users.some(user => user.email === recipient)) {
+          notify($('#authNotice'), 'The recipient email must already exist in this browser as a local account.', 'error');
+          return;
+        }
+        const allMessages = readStored(STORAGE.messages, []);
+        allMessages.unshift({ id:`m${Date.now()}`, from: currentUser.email, to: recipient, subject, body, sentAt: new Date().toISOString() });
+        store(STORAGE.messages, allMessages);
+        openInboxModal();
+      }, { once:true });
+    }
+
+    function openSavedWorkModal() {
+      if (!currentUser) {
+        showAuthOverlay();
+        return;
+      }
+      const work = readStored(STORAGE.work, []).filter(item => item.owner === currentUser.email).sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+      openModal(`
+        <h2>Saved work</h2>
+        <form id="workFormModal">
+          <div style="display:grid; gap:10px; margin-bottom:14px;">
+            <input class="field" id="workTitle" type="text" placeholder="Title" required>
+            <textarea class="field" id="workContent" rows="6" placeholder="Write your notes or draft here..." required></textarea>
+            <div class="mini-actions">
+              <button type="submit" class="btn primary">Save</button>
+              <button type="button" class="btn secondary" id="cancelWorkModal">Cancel</button>
+            </div>
+          </div>
+        </form>
+        <div class="panel">
+          <h3>Your saved entries</h3>
+          ${work.length ? work.map(item => `
+            <article class="list-item">
+              <div class="item-meta">${escapeHTML(new Date(item.updatedAt).toLocaleString())}</div>
+              <h4>${escapeHTML(item.title)}</h4>
+              <div class="item-body">${escapeHTML(item.content)}</div>
+              <div class="mini-actions">
+                <button class="btn secondary" type="button" data-edit-id="${escapeHTML(item.id)}">Edit</button>
+                <button class="btn danger" type="button" data-delete-id="${escapeHTML(item.id)}">Delete</button>
+              </div>
+            </article>
+          `).join('') : '<div class="empty">No saved work yet.</div>'}
+        </div>
+      `);
+
+      $('#workFormModal').addEventListener('submit', (event) => {
+        event.preventDefault();
+        const title = $('#workTitle').value.trim();
+        const content = $('#workContent').value.trim();
+        if (!title || !content) return;
+        const items = readStored(STORAGE.work, []);
+        items.unshift({ id: `w${Date.now()}`, owner: currentUser.email, title, content, updatedAt: new Date().toISOString() });
+        store(STORAGE.work, items);
+        openSavedWorkModal();
+      }, { once:true });
+
+      $('#cancelWorkModal').addEventListener('click', closeModal, { once:true });
+
+      $$('[data-edit-id]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const items = readStored(STORAGE.work, []);
+          const item = items.find(entry => entry.id === btn.dataset.editId && entry.owner === currentUser.email);
+          if (!item) return;
+          $('#workTitle').value = item.title;
+          $('#workContent').value = item.content;
+          $('#workFormModal').dataset.editId = item.id;
+          $('#workFormModal').querySelector('button[type="submit"]').textContent = 'Update';
+        });
+      });
+
+      $$('[data-delete-id]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const items = readStored(STORAGE.work, []).filter(entry => !(entry.id === btn.dataset.deleteId && entry.owner === currentUser.email));
+          store(STORAGE.work, items);
+          openSavedWorkModal();
+        });
+      });
+    }
+
+    function showAuthOverlay() { $('#authOverlay').classList.remove('hidden'); }
+    function hideAuthOverlay() { $('#authOverlay').classList.add('hidden'); }
+
+    async function deriveHash(password, salt) {
+      const enc = new TextEncoder();
+      const key = await crypto.subtle.importKey('raw', enc.encode(password), 'PBKDF2', false, ['deriveBits']);
+      const bits = await crypto.subtle.deriveBits({ name:'PBKDF2', salt: enc.encode(salt), iterations:210000, hash:'SHA-256' }, key, 256);
+      const bytes = Array.from(new Uint8Array(bits));
+      return bytes.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    function setAuthMode(mode) {
+      authMode = mode;
+      $('#authTitle').textContent = mode === 'login' ? 'Log in' : 'Create account';
+      $('#authSubmit').textContent = mode === 'login' ? 'Log in' : 'Create account';
+      $('#toggleAuthMode').textContent = mode === 'login' ? 'Need an account? Create one' : 'Already have an account? Log in';
+      $('#passwordInput').setAttribute('autocomplete', mode === 'login' ? 'current-password' : 'new-password');
+    }
+
+    function saveSession(user) {
+      currentUser = user;
+      $('#userBadge').textContent = user.email;
+      $('#userBadge').classList.remove('hidden');
+      $('#authBtn').classList.add('hidden');
+      $('#logoutBtn').classList.remove('hidden');
+      $('#inboxBtn').classList.remove('hidden');
+      $('#savedWorkBtn').classList.remove('hidden');
+      renderInboxCount();
+      renderSavedWorkButton();
+      hideAuthOverlay();
+    }
+
+    function clearSession() {
+      currentUser = null;
+      localStorage.removeItem(STORAGE.session);
+      $('#userBadge').textContent = '';
+      $('#userBadge').classList.add('hidden');
+      $('#authBtn').classList.remove('hidden');
+      $('#logoutBtn').classList.add('hidden');
+      $('#inboxBtn').classList.add('hidden');
+      $('#savedWorkBtn').classList.add('hidden');
+      $('#authOverlay').classList.remove('hidden');
+    }
+
+    function restoreSession() {
+      const stored = readStored(STORAGE.session, null);
+      const users = readStored(STORAGE.users, []);
+      if (stored && stored.email) {
+        const match = users.find(user => user.email === stored.email);
+        if (match) {
+          currentUser = { id: match.id, email: match.email };
+          saveSession(currentUser);
+          return;
+        }
+      }
+      clearSession();
+    }
+
+    async function handleAuthSubmit(event) {
+      event.preventDefault();
+      const email = $('#emailInput').value.trim().toLowerCase();
+      const password = $('#passwordInput').value;
+      const users = readStored(STORAGE.users, []);
+
+      try {
+        if (modeNotAvailable()) throw new Error('This browser needs Web Crypto support. Try a modern browser.');
+        if (!email || !password) throw new Error('Please enter both email and password.');
+        if (password.length < 8) throw new Error('Password must be at least 8 characters long.');
+
+        if (authMode === 'signup') {
+          if (users.some(user => user.email === email)) throw new Error('This email already exists in this browser. Try logging in instead.');
+          const user = { id: `u${Date.now()}`, email, passwordHash: await deriveHash(password, email), createdAt: new Date().toISOString() };
+          users.push(user);
+          store(STORAGE.users, users);
+          store(STORAGE.session, { email: user.email, id: user.id });
+          saveSession(user);
+          notify($('#authNotice'), 'Account created. You are now signed in.', 'success');
+        } else {
+          const match = users.find(user => user.email === email);
+          if (!match) throw new Error('No account found for that email on this device. Create an account first.');
+          const expected = await deriveHash(password, email);
+          if (match.passwordHash !== expected) throw new Error('Incorrect password.');
+          store(STORAGE.session, { email: match.email, id: match.id });
+          saveSession({ id: match.id, email: match.email });
+          notify($('#authNotice'), 'Logged in successfully.', 'success');
+        }
+
+        $('#authForm').reset();
+        setTimeout(() => { hideAuthOverlay(); }, 500);
+      } catch (error) {
+        notify($('#authNotice'), error.message || 'Something went wrong.', 'error');
+      }
+    }
+
+    function modeNotAvailable() {
+      return !(window.crypto && crypto.subtle && window.TextEncoder);
     }
 
     function renderWatchlist() {
       const list = $('#watchList');
-      list.innerHTML = watchlist.length ? watchlist.map(id => {
+      if (!watchlist.length) {
+        list.innerHTML = '<li>No profiles saved.</li>';
+        return;
+      }
+      list.innerHTML = watchlist.map(id => {
         const profile = sampleProfiles.find(item => item.id === id);
-        return profile ? `<li>${escapeHTML(profile.name)} <button type="button" class="tinybtn removeWatch" data-id="${escapeHTML(profile.id)}">Remove</button></li>` : '';
-      }).join('') : '<li>No profiles saved.</li>';
-    }
-
-    function setupWatchlist() {
-      const select = $('#watchSelect');
-      select.innerHTML = sampleProfiles.map(profile => `<option value="${escapeHTML(profile.id)}">${escapeHTML(profile.name)}</option>`).join('');
-      renderWatchlist();
+        return profile ? `<li>${escapeHTML(profile.name)} <button type="button" class="removeWatch" data-id="${escapeHTML(id)}" style="margin-left:8px;">Remove</button></li>` : '';
+      }).join('');
+      $$('.removeWatch').forEach(button => {
+        button.addEventListener('click', () => {
+          watchlist = watchlist.filter(id => id !== button.dataset.id);
+          store(STORAGE.watchlist, watchlist);
+          renderWatchlist();
+        });
+      });
     }
 
     function renderHours() {
       const savedByDay = new Map(businessHours.map(item => [item.day, item]));
       $('#hoursEditor').innerHTML = weekdays.map(day => {
         const item = savedByDay.get(day) || { open: false, start: '09:00', end: '17:00' };
-        return `<div class="day-row"><label><input type="checkbox" id="open-${day}" ${item.open ? 'checked' : ''}> ${day}</label><input type="time" data-start="${day}" value="${item.start}"><input type="time" data-end="${day}" value="${item.end}"></div>`;
+        return `
+          <div style="display:grid; grid-template-columns:1fr auto auto; gap:8px; align-items:center; margin-bottom:8px;">
+            <label><input type="checkbox" id="open-${day}" ${item.open ? 'checked' : ''}> ${day}</label>
+            <input type="time" data-start="${day}" value="${item.start}">
+            <input type="time" data-end="${day}" value="${item.end}">
+          </div>
+        `;
       }).join('');
     }
 
-    $('#searchBtn').addEventListener('click', renderProfiles);
-    $('#searchInput').addEventListener('input', renderProfiles);
-    $('#typeFilter').addEventListener('change', renderProfiles);
-    $('#industryFilter').addEventListener('change', renderProfiles);
-    $('#recommendBtn').addEventListener('click', renderRecommendations);
-    $('#goalSelect').addEventListener('change', renderRecommendations);
-    $('#recIndustry').addEventListener('change', renderRecommendations);
-    $('#recLocation').addEventListener('change', renderRecommendations);
-    $('#postOpportunityBtn').addEventListener('click', postOpportunity);
-    $('#closeModal').addEventListener('click', closeModal);
-    $('#modal').addEventListener('click', event => { if (event.target.id === 'modal') closeModal(); });
-    document.addEventListener('keydown', event => { if (event.key === 'Escape') closeModal(); });
-    $('#roomFiles').addEventListener('change', event => {
-      const files = Array.from(event.target.files || []);
-      $('#roomFileList').innerHTML = files.length ? files.map(file => `<li>${escapeHTML(file.name)}</li>`).join('') : '<li>No files selected.</li>';
-    });
-    $('#clearRoomBtn')?.addEventListener('click', () => {
-      $('#roomFiles').value = '';
-      $('#roomFileList').innerHTML = '<li>No files selected.</li>';
-    });
-    $('#addWatchBtn').addEventListener('click', () => {
-      const id = $('#watchSelect').value;
-      if (!watchlist.includes(id)) {
-        watchlist.push(id);
-        store('vl_watchlist', watchlist);
-        renderWatchlist();
-      }
-    });
-    $('#watchList').addEventListener('click', event => {
-      const button = event.target.closest('.removeWatch');
-      if (!button) return;
-      watchlist = watchlist.filter(id => id !== button.dataset.id);
-      store('vl_watchlist', watchlist);
-      renderWatchlist();
-    });
-    $('#saveHoursBtn').addEventListener('click', () => {
-      businessHours = weekdays.map(day => ({
-        day,
-        open: $(`#open-${day}`).checked,
-        start: $(`[data-start="${day}"]`).value,
-        end: $(`[data-end="${day}"]`).value
-      }));
-      store('vl_business_hours', businessHours);
-    });
-    $('#opportunityList').addEventListener('click', event => {
-      const button = event.target.closest('.interestBtn');
-      if (button) respondToOpportunity(button.dataset.id);
-    });
-    ['profilesList', 'recommendationsList'].forEach(id => {
-      $('#' + id).addEventListener('click', event => {
-        const button = event.target.closest('.profile-name');
-        if (button) messageProfile(button.dataset.profileId);
+    function loadUI() {
+      $('#searchBtn').addEventListener('click', renderProfiles);
+      $('#searchInput').addEventListener('input', renderProfiles);
+      $('#typeFilter').addEventListener('change', renderProfiles);
+      $('#industryFilter').addEventListener('change', renderProfiles);
+      $('#goalSelect').addEventListener('change', renderRecommendations);
+      $('#recIndustry').addEventListener('change', renderRecommendations);
+      $('#recLocation').addEventListener('change', renderRecommendations);
+      $('#recommendBtn').addEventListener('click', renderRecommendations);
+      $('#postOpportunityBtn').addEventListener('click', postOpportunity);
+      $('#closeModal').addEventListener('click', closeModal);
+      $('#modal').addEventListener('click', (event) => { if (event.target.id === 'modal') closeModal(); });
+      $('#authBtn').addEventListener('click', () => { hideAuthOverlay(); showAuthOverlay(); });
+      $('#logoutBtn').addEventListener('click', () => { clearSession(); });
+      $('#toggleAuthMode').addEventListener('click', () => setAuthMode(authMode === 'login' ? 'signup' : 'login'));
+      $('#authForm').addEventListener('submit', handleAuthSubmit);
+      $('#inboxBtn').addEventListener('click', openInboxModal);
+      $('#savedWorkBtn').addEventListener('click', openSavedWorkModal);
+      $('#addWatchBtn').addEventListener('click', () => { const id = $('#watchSelect').value; if (!watchlist.includes(id)) { watchlist.push(id); store(STORAGE.watchlist, watchlist); renderWatchlist(); } });
+      $('#saveHoursBtn').addEventListener('click', () => {
+        businessHours = weekdays.map(day => ({
+          day,
+          open: $(`#open-${day}`).checked,
+          start: $(`[data-start="${day}"]`).value,
+          end: $(`[data-end="${day}"]`).value
+        }));
+        store(STORAGE.businessHours, businessHours);
       });
-    });
-    $('#inboxBtn').addEventListener('click', showInbox);
+      $('#clearRoomBtn').addEventListener('click', () => { $('#roomFiles').value = ''; $('#roomFileList').innerHTML = '<li>No files selected.</li>'; });
+      $('#roomFiles').addEventListener('change', (event) => {
+        const files = [...(event.target.files || [])];
+        $('#roomFileList').innerHTML = files.length ? files.map(file => `<li>${escapeHTML(file.name)}</li>`).join('') : '<li>No files selected.</li>';
+      });
+      $('#opportunityList').addEventListener('click', (event) => {
+        const btn = event.target.closest('.interestBtn');
+        if (btn) respondToOpportunity(btn.dataset.id);
+      });
+      $('#profilesList').addEventListener('click', (event) => {
+        const btn = event.target.closest('.profile-name');
+        if (btn) messageProfile(btn.dataset.profileId);
+      });
+      $('#recommendationsList').addEventListener('click', (event) => {
+        const btn = event.target.closest('.profile-name');
+        if (btn) messageProfile(btn.dataset.profileId);
+      });
+      document.addEventListener('keydown', (event) => { if (event.key === 'Escape') closeModal(); });
 
-    renderOpportunities();
-    renderInboxCount();
-    renderHours();
-    loadNetworkProfiles();
+      const typeVals = [...new Set(sampleProfiles.map(p => p.type))];
+      const industryVals = [...new Set(sampleProfiles.map(p => p.industry))];
+      const locationVals = [...new Set(sampleProfiles.map(p => p.location))];
+      $('#typeFilter').innerHTML = '<option value="">All types</option>' + typeVals.map(val => `<option value="${escapeHTML(val)}">${escapeHTML(val)}</option>`).join('');
+      $('#industryFilter').innerHTML = '<option value="">All industries</option>' + industryVals.map(val => `<option value="${escapeHTML(val)}">${escapeHTML(val)}</option>`).join('');
+      $('#recIndustry').innerHTML = '<option value="">Any industry</option>' + industryVals.map(val => `<option value="${escapeHTML(val)}">${escapeHTML(val)}</option>`).join('');
+      $('#recLocation').innerHTML = '<option value="">Any location</option>' + locationVals.map(val => `<option value="${escapeHTML(val)}">${escapeHTML(val)}</option>`).join('');
+      $('#watchSelect').innerHTML = sampleProfiles.map(profile => `<option value="${escapeHTML(profile.id)}">${escapeHTML(profile.name)}</option>`).join('');
+
+      renderProfiles();
+      renderRecommendations();
+      renderOpportunities();
+      renderWatchlist();
+      renderHours();
+      restoreSession();
+    }
+
+    loadUI();
   </script>
 </body>
 </html>
