@@ -14,44 +14,52 @@
   <iframe id="website" title="VentureLink website"></iframe>
   <main id="loadError" role="alert"><h1>VentureLink could not load</h1><p>Please refresh this page or check your internet connection.</p></main>
   <script>
-    // Load the existing site, then promote the inbox action into the main navigation.
+    // Load the existing site and expose its inbox through the primary navigation.
     const source = 'https://raw.githubusercontent.com/chking3811-sudo/MCFai/458e8ee1afe7129313867584096341304b73ee7f/VentureLink_Updated_v3.html';
     const frame = document.querySelector('#website');
+    const showLoadError = () => {
+      frame.hidden = true;
+      document.querySelector('#loadError').style.display = 'block';
+    };
+
     fetch(source).then(response => {
       if (!response.ok) throw new Error('Website source unavailable');
       return response.text();
     }).then(html => {
-      frame.srcdoc = html;
       frame.addEventListener('load', () => {
         try {
           const doc = frame.contentDocument;
           const inboxButton = doc.querySelector('#inboxBtn');
           const nav = doc.querySelector('.navlinks');
-          if (!inboxButton || !nav) throw new Error('Navigation not found');
-          inboxButton.remove();
+          if (!inboxButton || !nav) throw new Error('Messaging controls are unavailable');
+
+          // Keep the original inbox control and its existing click handler as the
+          // reliable trigger, but remove it from sight and from keyboard navigation.
+          inboxButton.hidden = true;
+          inboxButton.tabIndex = -1;
+          inboxButton.setAttribute('aria-hidden', 'true');
+
           const messaging = doc.createElement('a');
           messaging.href = '#messaging';
           messaging.textContent = 'Messaging';
           messaging.setAttribute('aria-label', 'Open Messaging inbox');
           messaging.addEventListener('click', event => {
             event.preventDefault();
-            frame.contentWindow.showInbox();
+            inboxButton.click();
           });
           nav.append(messaging);
+
           const resize = () => {
             frame.style.height = `${Math.max(doc.documentElement.scrollHeight, doc.body.scrollHeight)}px`;
           };
           resize();
           new ResizeObserver(resize).observe(doc.documentElement);
         } catch (error) {
-          frame.hidden = true;
-          document.querySelector('#loadError').style.display = 'block';
+          showLoadError();
         }
       }, {once:true});
-    }).catch(() => {
-      frame.hidden = true;
-      document.querySelector('#loadError').style.display = 'block';
-    });
+      frame.srcdoc = html;
+    }).catch(showLoadError);
   </script>
 </body>
 </html>
