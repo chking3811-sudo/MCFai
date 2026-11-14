@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#102b4e">
   <title>VentureLink | Build the right connections</title>
   <style>
-    *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#f6f8fb}iframe{display:block;width:100%;height:100vh;border:0}
+    *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#f6f8fb}iframe{display:block;width:100%;min-height:100vh;border:0}
     #loadError{display:none;max-width:680px;margin:12vh auto;padding:24px;color:#172b45;font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;background:#fff;border:1px solid #e1e8f1;border-radius:14px}
   </style>
 </head>
@@ -14,7 +14,8 @@
   <iframe id="website" title="VentureLink website"></iframe>
   <main id="loadError" role="alert"><h1>VentureLink could not load</h1><p>Please refresh this page or check your internet connection.</p></main>
   <script>
-    // Load the existing site and expose its inbox through the primary navigation.
+    // Use the original complete VentureLink demo as the shell, then enhance its
+    // navigation with a real inline Messaging page (not the modal overlay).
     const source = 'https://raw.githubusercontent.com/chking3811-sudo/MCFai/458e8ee1afe7129313867584096341304b73ee7f/VentureLink_Updated_v3.html';
     const frame = document.querySelector('#website');
     const showLoadError = () => {
@@ -31,24 +32,184 @@
           const doc = frame.contentDocument;
           const inboxButton = doc.querySelector('#inboxBtn');
           const nav = doc.querySelector('.navlinks');
-          if (!inboxButton || !nav) throw new Error('Messaging controls are unavailable');
+          const main = doc.querySelector('main');
+          if (!inboxButton || !nav || !main) throw new Error('Website navigation unavailable');
 
-          // Keep the original inbox control and its existing click handler as the
-          // reliable trigger, but remove it from sight and from keyboard navigation.
-          inboxButton.hidden = true;
-          inboxButton.tabIndex = -1;
-          inboxButton.setAttribute('aria-hidden', 'true');
+          // Remove the old inbox button completely so it cannot open the overlay.
+          inboxButton.remove();
 
-          const messaging = doc.createElement('a');
-          messaging.href = '#messaging';
-          messaging.textContent = 'Messaging';
-          messaging.setAttribute('aria-label', 'Open Messaging inbox');
-          messaging.addEventListener('click', event => {
+          const messagingLink = doc.createElement('a');
+          messagingLink.href = '#messaging';
+          messagingLink.textContent = 'Messaging';
+          messagingLink.addEventListener('click', event => {
             event.preventDefault();
-            inboxButton.click();
+            doc.querySelector('#messaging').scrollIntoView({behavior:'smooth',block:'start'});
+            doc.querySelector('#contactSearch').focus({preventScroll:true});
           });
-          nav.append(messaging);
+          nav.append(messagingLink);
 
+          const styles = doc.createElement('style');
+          styles.textContent = `
+            #messaging{scroll-margin-top:90px;padding:34px 0 48px}
+            #messaging h2{margin:0 0 6px;font-size:28px;color:#172b45}
+            #messaging .messaging-intro{margin:0 0 20px;color:#687991}
+            #messaging .messaging-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:18px;align-items:start}
+            #messaging .messaging-card{background:#fff;border:1px solid #e1e8f1;border-radius:14px;padding:20px;box-shadow:0 4px 18px #102b4e0a}
+            #messaging .messaging-card h3{margin:0 0 12px;color:#172b45}
+            #messaging label{display:block;font-weight:650;font-size:13px;margin:12px 0 5px}
+            #messaging input,#messaging select,#messaging textarea{width:100%;border:1px solid #cbd6e4;border-radius:9px;padding:10px 12px;color:#172b45;background:white;font:inherit}
+            #messaging textarea{min-height:118px;resize:vertical}
+            #messaging .messaging-btn{border:0;border-radius:9px;padding:10px 14px;font:inherit;font-weight:700;cursor:pointer;background:#2869bd;color:white;margin-top:12px}
+            #messaging .messaging-btn.secondary{background:#eaf2fc;color:#102b4e}
+            #messaging .messaging-help{font-size:13px;color:#687991;line-height:1.55}
+            #messaging .contact-results{display:grid;gap:10px;margin-top:14px}
+            #messaging .contact-item{border:1px solid #e1e8f1;border-radius:10px;padding:12px;overflow-wrap:anywhere}
+            #messaging .contact-item h4{margin:0 0 4px;color:#172b45}
+            #messaging .contact-item p{margin:3px 0;font-size:13px;color:#52647b}
+            #messaging .contact-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+            #messaging .contact-actions button,#messaging .contact-actions a{border:0;border-radius:8px;padding:7px 10px;background:#eaf2fc;color:#102b4e;text-decoration:none;font:inherit;font-size:13px;font-weight:700;cursor:pointer}
+            #messaging .messaging-status{min-height:22px;margin-top:10px;font-size:13px;color:#176443}
+            @media(max-width:760px){#messaging .messaging-grid{grid-template-columns:1fr}#messaging{padding:28px 0}}
+          `;
+          doc.head.append(styles);
+
+          const messagingPage = doc.createElement('section');
+          messagingPage.id = 'messaging';
+          messagingPage.className = 'section';
+          messagingPage.innerHTML = `
+            <h2>Messaging</h2>
+            <p class="messaging-intro">Manage contacts you add and start a message using your email or phone app.</p>
+            <div class="messaging-grid">
+              <section class="messaging-card" aria-labelledby="contactsHeading">
+                <h3 id="contactsHeading">Your contacts</h3>
+                <p class="messaging-help">Add people whose contact information you already have permission to use. Contacts are stored only in this browser and are not searchable across the internet.</p>
+                <form id="contactForm">
+                  <label for="contactName">Name</label><input id="contactName" required maxlength="100" autocomplete="name" placeholder="Name">
+                  <label for="contactEmail">Email</label><input id="contactEmail" type="email" maxlength="254" autocomplete="email" placeholder="name@example.com">
+                  <label for="contactPhone">Phone</label><input id="contactPhone" type="tel" maxlength="40" autocomplete="tel" placeholder="+1 555 555 0100">
+                  <button class="messaging-btn" type="submit">Save contact</button>
+                </form>
+                <label for="contactSearch">Search your saved contacts</label><input id="contactSearch" type="search" placeholder="Search name, email, or phone">
+                <div id="contactResults" class="contact-results" aria-live="polite"></div>
+              </section>
+              <section class="messaging-card" aria-labelledby="composeHeading">
+                <h3 id="composeHeading">Write a message</h3>
+                <p class="messaging-help">Choose email to open your email app or text to open your phone's messaging app. VentureLink does not send messages or reveal whether they were delivered.</p>
+                <form id="composeForm">
+                  <label for="messageToName">Contact name</label><input id="messageToName" maxlength="100" placeholder="Who are you contacting?">
+                  <label for="messageMethod">Contact method</label><select id="messageMethod"><option value="email">Email</option><option value="sms">Text message</option></select>
+                  <label for="messageAddress" id="messageAddressLabel">Email address</label><input id="messageAddress" required placeholder="name@example.com">
+                  <label for="messageSubject">Subject</label><input id="messageSubject" maxlength="160" placeholder="A quick introduction">
+                  <label for="messageBody">Message</label><textarea id="messageBody" required maxlength="5000" placeholder="Write your message..."></textarea>
+                  <button class="messaging-btn" type="submit" id="sendMessageButton">Open email app</button>
+                  <p id="messagingStatus" class="messaging-status" role="status" aria-live="polite"></p>
+                </form>
+              </section>
+            </div>`;
+          main.append(messagingPage);
+
+          const storageKey = 'venturelink_saved_contacts_v1';
+          const escapeHTML = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+          const readContacts = () => {
+            try {
+              const value = JSON.parse(frame.contentWindow.localStorage.getItem(storageKey) || '[]');
+              return Array.isArray(value) ? value : [];
+            } catch (_) { return []; }
+          };
+          const saveContacts = contacts => {
+            try { frame.contentWindow.localStorage.setItem(storageKey, JSON.stringify(contacts)); return true; }
+            catch (_) { return false; }
+          };
+          const search = doc.querySelector('#contactSearch');
+          const results = doc.querySelector('#contactResults');
+          const renderContacts = () => {
+            const query = search.value.trim().toLowerCase();
+            const contacts = readContacts().filter(contact => [contact.name,contact.email,contact.phone].join(' ').toLowerCase().includes(query));
+            results.innerHTML = contacts.length ? contacts.map(contact => `
+              <article class="contact-item">
+                <h4>${escapeHTML(contact.name)}</h4>
+                ${contact.email ? `<p>${escapeHTML(contact.email)}</p>` : ''}
+                ${contact.phone ? `<p>${escapeHTML(contact.phone)}</p>` : ''}
+                <div class="contact-actions">
+                  <button type="button" data-message-contact="${escapeHTML(contact.id)}">Write message</button>
+                  ${contact.phone ? `<a href="tel:${escapeHTML(contact.phone.replace(/[^+\\d]/g,''))}">Call</a>` : ''}
+                  <button type="button" data-remove-contact="${escapeHTML(contact.id)}">Remove</button>
+                </div>
+              </article>`).join('') : `<p class="messaging-help">${query ? 'No matching saved contacts.' : 'No contacts yet. Add a contact above to get started.'}</p>`;
+          };
+
+          doc.querySelector('#contactForm').addEventListener('submit', event => {
+            event.preventDefault();
+            const name = doc.querySelector('#contactName').value.trim();
+            const email = doc.querySelector('#contactEmail').value.trim();
+            const phone = doc.querySelector('#contactPhone').value.trim();
+            if (!email && !phone) {
+              doc.querySelector('#messagingStatus').textContent = 'Add an email address, a phone number, or both.';
+              return;
+            }
+            const contacts = readContacts();
+            contacts.unshift({id:`contact-${Date.now()}-${Math.random().toString(36).slice(2,8)}`,name,email,phone});
+            if (!saveContacts(contacts)) {
+              doc.querySelector('#messagingStatus').textContent = 'Could not save contacts in this browser.';
+              return;
+            }
+            event.currentTarget.reset();
+            doc.querySelector('#messagingStatus').textContent = 'Contact saved in this browser.';
+            renderContacts();
+          });
+          search.addEventListener('input', renderContacts);
+          results.addEventListener('click', event => {
+            const messageButton = event.target.closest('[data-message-contact]');
+            const removeButton = event.target.closest('[data-remove-contact]');
+            if (messageButton) {
+              const contact = readContacts().find(item => item.id === messageButton.dataset.messageContact);
+              if (!contact) return;
+              doc.querySelector('#messageToName').value = contact.name || '';
+              const method = doc.querySelector('#messageMethod');
+              method.value = contact.email ? 'email' : 'sms';
+              method.dispatchEvent(new Event('change'));
+              doc.querySelector('#messageAddress').value = contact.email || contact.phone || '';
+              doc.querySelector('#messageBody').focus();
+              doc.querySelector('#composeHeading').scrollIntoView({behavior:'smooth',block:'center'});
+            }
+            if (removeButton) {
+              saveContacts(readContacts().filter(item => item.id !== removeButton.dataset.removeContact));
+              renderContacts();
+            }
+          });
+
+          const method = doc.querySelector('#messageMethod');
+          const address = doc.querySelector('#messageAddress');
+          const updateMethod = () => {
+            const emailMode = method.value === 'email';
+            doc.querySelector('#messageAddressLabel').textContent = emailMode ? 'Email address' : 'Phone number';
+            address.type = emailMode ? 'email' : 'tel';
+            address.placeholder = emailMode ? 'name@example.com' : '+1 555 555 0100';
+            doc.querySelector('#sendMessageButton').textContent = emailMode ? 'Open email app' : 'Open text app';
+          };
+          method.addEventListener('change', updateMethod);
+          doc.querySelector('#composeForm').addEventListener('submit', event => {
+            event.preventDefault();
+            const emailMode = method.value === 'email';
+            const recipient = address.value.trim();
+            const body = doc.querySelector('#messageBody').value.trim();
+            const subject = doc.querySelector('#messageSubject').value.trim();
+            const href = emailMode
+              ? `mailto:${encodeURIComponent(recipient)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+              : `sms:${recipient.replace(/[^+\\d]/g,'')}?body=${encodeURIComponent(body)}`;
+            const link = doc.createElement('a');
+            link.href = href;
+            link.style.display = 'none';
+            doc.body.append(link);
+            link.click();
+            link.remove();
+            doc.querySelector('#messagingStatus').textContent = emailMode
+              ? 'Your email app should open with the message ready. Review and send it there.'
+              : 'Your messaging app should open with the text ready. Review and send it there.';
+          });
+
+          renderContacts();
+          updateMethod();
           const resize = () => {
             frame.style.height = `${Math.max(doc.documentElement.scrollHeight, doc.body.scrollHeight)}px`;
           };
