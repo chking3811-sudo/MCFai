@@ -16,8 +16,7 @@
   <iframe id="site" title="VentureLink"></iframe>
   <main id="loadError" role="alert"><h1>VentureLink could not load</h1><p>Refresh the page and try again.</p></main>
   <script>
-    // Keep the existing website and its scripts intact; only add scrolling
-    // behavior to the inbox modal so its entire content remains reachable.
+    // Load the existing site and repair the auth tab selector before its script runs.
     const source = 'https://raw.githubusercontent.com/chking3811-sudo/MCFai/17eab31b2ab738c2150ef6b64b1de0a728a4a4ef/VentureLink_Updated_v3.html';
     const frame = document.querySelector('#site');
     const showError = () => {
@@ -31,6 +30,10 @@
         return response.text();
       })
       .then(html => {
+        // In the embedded page, $ selects one element, not a collection. The old
+        // call $('.auth-tab').forEach(...) throws and prevents Create from working.
+        html = html.replace("$('.auth-tab').forEach(", "document.querySelectorAll('.auth-tab').forEach(");
+
         frame.addEventListener('load', () => {
           try {
             const doc = frame.contentDocument;
