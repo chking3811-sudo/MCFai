@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#102b4e">
+  <title>VentureLink | Inbox & saved work</title>
+  <style>
+    :root{color-scheme:light;--navy:#102b4e;--blue:#2869bd;--sky:#eaf2fc;--ink:#172b45;--muted:#687991;--line:#e1e8f1;--bg:#f6f8fb;--green:#16835d;--red:#a33333}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}button,input,textarea{font:inherit}button{cursor:pointer}.wrap{width:min(980px,calc(100% - 32px));margin:auto}.top{background:var(--navy);color:white;padding:16px 0}.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px}.brand{font-size:1.25rem;font-weight:800;color:white;text-decoration:none}.brand span{color:#8fc2ff}.muted{color:var(--muted)}.small{font-size:.9rem}.main{padding:36px 0 64px}.card{background:white;border:1px solid var(--line);border-radius:16px;padding:24px;box-shadow:0 6px 24px #102b4e0a}.auth{max-width:480px;margin:36px auto}.auth h1,.welcome h1{margin-top:0}.field{display:grid;gap:6px;margin:15px 0}.field label{font-weight:650}.field input,.field textarea{width:100%;padding:11px 12px;border:1px solid #cbd6e4;border-radius:9px;color:var(--ink);background:white}.field textarea{min-height:145px;resize:vertical}.btn{border:0;border-radius:9px;padding:10px 15px;font-weight:700}.primary{background:var(--blue);color:white}.secondary{background:var(--sky);color:var(--navy)}.danger{background:#fff0f0;color:var(--red)}.linkbtn{border:0;background:none;color:var(--blue);padding:8px 0;text-decoration:underline}.row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.notice{padding:12px 14px;border-radius:9px;background:var(--sky);margin:14px 0}.notice.error{background:#fff0f0;color:var(--red)}.notice.success{background:#e8f7ef;color:#176443}.hidden{display:none!important}.app-head{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:20px}.tabs{display:flex;gap:8px;border-bottom:1px solid var(--line);margin:22px 0}.tab{border:0;background:transparent;padding:11px 14px;color:var(--muted);font-weight:700;border-bottom:3px solid transparent}.tab.active{color:var(--blue);border-bottom-color:var(--blue)}.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.item{border:1px solid var(--line);border-radius:11px;padding:15px;margin:12px 0;overflow-wrap:anywhere}.item h3{margin:0 0 4px}.item p{white-space:pre-wrap;margin:10px 0}.item-meta{font-size:.85rem;color:var(--muted)}.item-actions{display:flex;gap:8px;margin-top:10px}.empty{padding:20px;text-align:center;color:var(--muted);border:1px dashed #cbd6e4;border-radius:10px}.footer{padding:20px 0;color:var(--muted);font-size:.85rem;border-top:1px solid var(--line)}
+    @media(max-width:680px){.grid{grid-template-columns:1fr}.card{padding:18px}.main{padding-top:22px}.app-head{align-items:flex-start}}
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <header class="top"><div class="wrap"><a class="brand" href="./">Venture<span>Link.</span></a><span id="topStatus" class="small">Private inbox & saved work</span></div></header>
+  <main class="wrap main">
+    <section id="setupNotice" class="card hidden" aria-live="polite">
+      <h1>One-time setup needed</h1>
+      <p>This page needs a Supabase project to securely create accounts and sync inbox messages and saved work across devices. It is not connected yet.</p>
+      <ol><li>Create a Supabase project.</li><li>Run the SQL in <code>supabase-setup.sql</code> in the project's SQL Editor.</li><li>Set your project URL and publishable (anon) key in the configuration at the top of this page's script.</li><li>For password-only signup, turn off email confirmations under <strong>Authentication → Sign In / Providers → Email</strong>. Use strong passwords; don't reuse an important password.</li></ol>
+      <p class="small muted">Passwords are handled by Supabase Auth and are never saved by this page. The public key is safe to put in a browser only when the database row-level security policies from the SQL file are enabled. This app does not send email notifications; recipients see messages when they sign in.</p>
+    </section>
+    <section id="authView" class="card auth hidden">
+      <h1 id="authTitle">Log in</h1>
+      <p class="muted">Use your email and password to open your private inbox and saved work.</p>
+      <div id="authNotice" class="notice hidden" role="status"></div>
+      <form id="authForm">
+        <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" required maxlength="254"></div>
+        <div class="field"><label for="password">Password</label><input id="password" name="password" type="password" autocomplete="current-password" required minlength="8" maxlength="128"></div>
+        <button id="authSubmit" class="btn primary" type="submit">Log in</button>
+      </form>
+      <button id="authSwitch" class="linkbtn" type="button">New here? Create an account</button>
+      <p class="small muted">No verification code is needed if the project owner disables email confirmation in Supabase settings. Your password is securely managed by the sign-in provider—not stored as readable text by this app.</p>
+    </section>
+    <section id="appView" class="hidden">
+      <div class="app-head"><div class="welcome"><h1>Your VentureLink</h1><div class="muted">Signed in as <strong id="userEmail"></strong></div></div><button id="logoutBtn" class="btn secondary" type="button">Log out</button></div>
+      <div id="appNotice" class="notice hidden" role="status"></div>
+      <nav class="tabs" aria-label="Your account"><button class="tab active" data-panel="inboxPanel" type="button">Inbox</button><button class="tab" data-panel="sentPanel" type="button">Sent</button><button class="tab" data-panel="workPanel" type="button">Saved work</button></nav>
+      <section id="inboxPanel" class="panel"><div class="grid"><div class="card"><h2>Send a message</h2><p class="small muted">The recipient must have an account in this VentureLink project. They'll see it in their inbox after signing in.</p><form id="messageForm"><div class="field"><label for="toEmail">Recipient email</label><input id="toEmail" type="email" required maxlength="254" placeholder="someone@example.com"></div><div class="field"><label for="subject">Subject</label><input id="subject" required maxlength="160" placeholder="A quick introduction"></div><div class="field"><label for="messageBody">Message</label><textarea id="messageBody" required maxlength="10000" placeholder="Write your message..."></textarea></div><button class="btn primary" type="submit">Send to inbox</button></form></div><div class="card"><h2>Inbox</h2><div id="inboxList" aria-live="polite"></div></div></div></section>
+      <section id="sentPanel" class="panel hidden"><div class="card"><h2>Sent messages</h2><div id="sentList" aria-live="polite"></div></div></section>
+      <section id="workPanel" class="panel hidden"><div class="grid"><div class="card"><h2 id="workFormTitle">Save your work</h2><form id="workForm"><input id="workId" type="hidden"><div class="field"><label for="workTitle">Title</label><input id="workTitle" required maxlength="160" placeholder="Project notes"></div><div class="field"><label for="workContent">Notes or draft</label><textarea id="workContent" required maxlength="30000" placeholder="Write or paste your work here..."></textarea></div><div class="row"><button id="workSaveBtn" class="btn primary" type="submit">Save work</button><button id="workCancelBtn" class="btn secondary hidden" type="button">Cancel edit</button></div></form><p class="small muted">Saved securely to your account so you can access it after signing in on another device.</p></div><div class="card"><h2>Your saved work</h2><div id="workList" aria-live="polite"></div></div></div></section>
+    </section>
+  </main>
+  <footer class="footer"><div class="wrap">VentureLink · Private account tools. Share only information you intend to send.</div></footer>
+<script>
+  // Replace these with the project URL and publishable/anon key from Supabase Settings → API.
+  const SUPABASE_URL = 'YOUR_SUPABASE_PROJECT_URL';
+  const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_PUBLISHABLE_OR_ANON_KEY';
+  const $ = (selector) => document.querySelector(selector);
+  const escapeHTML = (value) => String(value ?? '').replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  let client, currentUser, authMode = 'login';
+  const setupNotice = $('#setupNotice'), authView = $('#authView'), appView = $('#appView');
+  function notice(element, text, kind='') { element.textContent = text; element.className = `notice ${kind}`.trim(); element.classList.remove('hidden'); }
+  function hideNotice(element) { element.classList.add('hidden'); element.textContent = ''; }
+  function showAuth() { authView.classList.remove('hidden'); appView.classList.add('hidden'); $('#topStatus').textContent = 'Private inbox & saved work'; }
+  function showApp(user) { currentUser = user; $('#userEmail').textContent = user.email || ''; authView.classList.add('hidden'); appView.classList.remove('hidden'); $('#topStatus').textContent = 'Signed in'; refreshAll(); }
+  function setAuthMode(mode) { authMode = mode; $('#authTitle').textContent = mode === 'login' ? 'Log in' : 'Create your account'; $('#authSubmit').textContent = mode === 'login' ? 'Log in' : 'Create account'; $('#password').autocomplete = mode === 'login' ? 'current-password' : 'new-password'; $('#authSwitch').textContent = mode === 'login' ? 'New here? Create an account' : 'Already have an account? Log in'; hideNotice($('#authNotice')); }
+  $('#authSwitch').addEventListener('click', () => setAuthMode(authMode === 'login' ? 'signup' : 'login'));
+  $('#authForm').addEventListener('submit', async (event) => {
+    event.preventDefault(); if (!client) return;
+    const email = $('#email').value.trim(), password = $('#password').value;
+    const button = $('#authSubmit'); button.disabled = true;
+    try {
+      const result = authMode === 'login' ? await client.auth.signInWithPassword({email,password}) : await client.auth.signUp({email,password});
+      if (result.error) throw result.error;
+      if (result.data.session) showApp(result.data.user);
+      else notice($('#authNotice'), 'Account created. If email confirmation is enabled in Supabase, confirm your email before logging in. To skip verification, disable email confirmations in the project settings.', 'success');
+    } catch (error) { notice($('#authNotice'), error.message || 'Could not sign in. Please try again.', 'error'); }
+    finally { button.disabled = false; }
+  });
+  $('#logoutBtn').addEventListener('click', async () => { const {error} = await client.auth.signOut(); if (error) notice($('#appNotice'), error.message, 'error'); else { currentUser = null; showAuth(); } });
+  document.querySelectorAll('.tab').forEach((tab) => tab.addEventListener('click', () => { document.querySelectorAll('.tab').forEach((item) => item.classList.toggle('active', item === tab)); document.querySelectorAll('.panel').forEach((panel) => panel.classList.toggle('hidden', panel.id !== tab.dataset.panel)); }));
+  async function refreshAll() { hideNotice($('#appNotice')); await Promise.all([loadMessages('inbox'),loadMessages('sent'),loadWork()]); }
+  function renderMessages(target, rows, emptyText) {
+    const list = $(target); if (!rows.length) { list.innerHTML = `<div class="empty">${emptyText}</div>`; return; }
+    list.innerHTML = rows.map((row) => `<article class="item"><h3>${escapeHTML(row.subject)}</h3><div class="item-meta">${target === '#inboxList' ? `From ${escapeHTML(row.sender_email)}` : `To ${escapeHTML(row.recipient_email)}`} · ${escapeHTML(new Date(row.created_at).toLocaleString())}</div><p>${escapeHTML(row.body)}</p></article>`).join('');
+  }
+  async function loadMessages(kind) {
+    const target = kind === 'inbox' ? '#inboxList' : '#sentList';
+    const query = client.from('messages').select('id,sender_id,sender_email,recipient_email,subject,body,created_at').order('created_at',{ascending:false}).limit(100);
+    const {data,error} = kind === 'inbox' ? await query.eq('recipient_email', currentUser.email) : await query.eq('sender_id', currentUser.id);
+    if (error) { $(target).innerHTML = '<div class="empty">Could not load messages. Check the database setup.</div>'; notice($('#appNotice'), error.message, 'error'); return; }
+    renderMessages(target, data || [], kind === 'inbox' ? 'Your inbox is empty.' : 'You have not sent any messages yet.');
+  }
+  $('#messageForm').addEventListener('submit', async (event) => {
+    event.preventDefault(); hideNotice($('#appNotice'));
+    const recipient = $('#toEmail').value.trim().toLowerCase();
+    if (recipient === (currentUser.email || '').toLowerCase()) { notice($('#appNotice'), 'Send a message to another account, not your own email.', 'error'); return; }
+    const button = event.submitter; button.disabled = true;
+    const {error} = await client.from('messages').insert({sender_id:currentUser.id,sender_email:currentUser.email,recipient_email:recipient,subject:$('#subject').value.trim(),body:$('#messageBody').value.trim()});
+    button.disabled = false;
+    if (error) { notice($('#appNotice'), error.message, 'error'); return; }
+    event.currentTarget.reset(); notice($('#appNotice'), 'Message sent to their VentureLink inbox.', 'success'); await loadMessages('sent');
+  });
+  function resetWorkForm() { $('#workForm').reset(); $('#workId').value = ''; $('#workFormTitle').textContent = 'Save your work'; $('#workSaveBtn').textContent = 'Save work'; $('#workCancelBtn').classList.add('hidden'); }
+  $('#workCancelBtn').addEventListener('click', resetWorkForm);
+  $('#workForm').addEventListener('submit', async (event) => {
+    event.preventDefault(); hideNotice($('#appNotice'));
+    const id = $('#workId').value, record = {user_id:currentUser.id,title:$('#workTitle').value.trim(),content:$('#workContent').value.trim(),updated_at:new Date().toISOString()};
+    const button = $('#workSaveBtn'); button.disabled = true;
+    const result = id ? await client.from('saved_work').update(record).eq('id',id) : await client.from('saved_work').insert(record);
+    button.disabled = false;
+    if (result.error) { notice($('#appNotice'), result.error.message, 'error'); return; }
+    resetWorkForm(); notice($('#appNotice'), 'Your work is saved to your account.', 'success'); await loadWork();
+  });
+  async function loadWork() {
+    const list = $('#workList');
+    const {data,error} = await client.from('saved_work').select('id,title,content,updated_at').order('updated_at',{ascending:false}).limit(100);
+    if (error) { list.innerHTML = '<div class="empty">Could not load saved work. Check the database setup.</div>'; notice($('#appNotice'), error.message, 'error'); return; }
+    if (!data || !data.length) { list.innerHTML = '<div class="empty">Nothing saved yet. Add a note or draft.</div>'; return; }
+    list.innerHTML = data.map((item) => `<article class="item"><h3>${escapeHTML(item.title)}</h3><div class="item-meta">Updated ${escapeHTML(new Date(item.updated_at).toLocaleString())}</div><p>${escapeHTML(item.content.length > 700 ? `${item.content.slice(0,700)}…` : item.content)}</p><div class="item-actions"><button class="btn secondary" type="button" data-edit="${escapeHTML(item.id)}">Edit</button><button class="btn danger" type="button" data-delete="${escapeHTML(item.id)}">Delete</button></div></article>`).join('');
+    list.querySelectorAll('[data-edit]').forEach((button) => button.addEventListener('click', () => { const item = data.find((entry) => entry.id === button.dataset.edit); if (!item) return; $('#workId').value = item.id; $('#workTitle').value = item.title; $('#workContent').value = item.content; $('#workFormTitle').textContent = 'Edit saved work'; $('#workSaveBtn').textContent = 'Save changes'; $('#workCancelBtn').classList.remove('hidden'); $('#workTitle').focus(); }));
+    list.querySelectorAll('[data-delete]').forEach((button) => button.addEventListener('click', async () => { if (!confirm('Delete this saved item?')) return; const {error:deleteError} = await client.from('saved_work').delete().eq('id',button.dataset.delete); if (deleteError) notice($('#appNotice'),deleteError.message,'error'); else { notice($('#appNotice'),'Saved item deleted.','success'); await loadWork(); } }));
+  }
+  async function start() {
+    if (SUPABASE_URL.startsWith('YOUR_') || SUPABASE_ANON_KEY.startsWith('YOUR_') || !window.supabase) { setupNotice.classList.remove('hidden'); return; }
+    try { client = window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY); const {data,error} = await client.auth.getSession(); if (error) throw error; if (data.session) showApp(data.session.user); else showAuth(); client.auth.onAuthStateChange((_event,session) => { if (session) showApp(session.user); else { currentUser = null; showAuth(); } }); }
+    catch (error) { setupNotice.classList.remove('hidden'); notice(setupNotice,error.message,'error'); }
+  }
+  start();
+</script>
+</body>
+</html>
